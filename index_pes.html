@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Traductor de C# a Python</title>
+</head>
+
+<body>
+    <h1>Compiladores 1: Proyecto 2</h1>
+    
+
+    <div class="contenedor">
+      <h3>Ingrese la entrada:</h3> 
+      <input id="fileInput" title="Abrir" type="file" size="50" onchange="AbrirArchivo(this.files)" class="btnp">
+      <button onclick="DescargarArchivo();" id="guardar" title="Guardar" class="btnp">Guardar</button>
+      <button onclick="agregar();" title="AgregarPestana" id="btn4" class="btnp">Nuevo</button>
+      <button onclick="quitar();" title="QuitarPestana" id="btn5" class="btnp">Cerrar</button>
+      
+      <button onclick="rep_err();" title="RepErrores" id="btn6" class="btnp">Reporte de Errores</button>
+      
+      <div id="pestanas">
+          <ul id=lista>
+          </ul>
+      </div>
+
+      <body>
+          <div id="contenidopestanas">
+          </div>
+      </body>
+
+      <br>
+       <button onclick="Analizar()" >Analizar</button>
+  </div>
+
+
+  <br><br>
+  
+
+  <body>
+    <div id="contenido_salida" class="contenedor">
+      <h3>Salida Python: </h3> 
+      <div id="div_Sal">
+        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
+      </div>
+
+    </div>
+  </body>
+ 
+  <br><br>
+  <!--para la consola de html-->
+    <body>
+      <div id="contenido_html" class="contenedor">
+        <h3>HTML-JSON: </h3> 
+        <pre id="contenido-html"></pre>
+
+        <h4>html</h4> 
+        <textarea id="txtHtml" name = "txtHtml" cols="60" rows="15"></textarea>
+        <h4>json</h4> 
+        <textarea id="txtJson" name = "txtJson" cols="60" rows="15"></textarea>
+        <!--<div id="div_var">
+         
+        </div>-->
+  
+      </div>
+    </body>
+    <!--fin  para la consula de html-->
+    <br><br>
+
+  <br><br>
+<!--para la tabla de simbolos inicio-->
+  <body>
+    <div id="contenido_var" class="contenedor">
+      <h3>Tabla de Variables: </h3> 
+      <pre id="contenido-variables"></pre>
+      <!--<div id="div_var">
+        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
+      </div>-->
+
+    </div>
+  </body>
+  <!--fin  la tabla de simbolos inicio-->
+  <br><br>
+
+
+    <!--<input type="file" id="file-input" />-->
+    <!--<h3>Contenido del archivo:</h3>
+    <pre id="contenido-archivo"></pre>-->
+    <br><br>
+   
+     <!--<textarea id="txtEntrada" cols="80" rows="10"></textarea>
+    <button onclick="crear_archivo()" >crear_archivo</button>-->
+
+    <br>
+    
+ </body>
+
+
+<script>
+function rep_err(){
+
+  //alert(string_errores);
+  //var venta = window.open("ReporteErr.html", "ReportesErrores");
+  var venta = window.open("", "ReportesErrores")
+  venta.document.write(string_errores);
+
+  //window.open('ReporteErr.html?errs='+string_errores);
+  //window.open('ReporteErr.html?val='+"aqui texto");
+  
+  ////venta.document.write("<meta charset=\"utf-8\">");
+  //venta.document.write("<meta charset=\"utf-8\">");
+  //venta.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
+ 
+  //venta.document.write("<pre id=\"contenido-archivo\"></pre>");
+  
+}
+</script>
+
+<script>
+    /*function Analizar(){
+        let entrada = document.getElementById("txtEntrada").value;
+        var salida = HacerAlgo(entrada);
+        document.getElementById("txtSalida").value = salida;
+    }*/
+
+    function Analizar(){
+
+      console.clear();
+        //let entrada = document.getElementById("txtEntrada").value;
+        let entrada=document.getElementById(get_vent()).value;
+
+        ////Analizador_cadena(entrada);
+        //var analisis_lex  = new Lexico(); 
+        //analisis_lex.Analizador_cadena(entrada);
+
+        var lex = new Lexico();
+        lex.Analizador_cadena(entrada);
+
+        lex.   ImprimeTokens();
+        lex. ImprimeErrores();
+
+        var sin = new Sintactico();
+        sin.Parsear(lex.lis_tokens, lex.lis_erores);
+
+        var err_enotrados = sin.NumErrores();
+        if (err_enotrados > 0) {
+
+          string_errores = sin.Html_Errores();
+          alert("Se contraron Errores en el Analisis");
+
+          var venta = window.open("", "ReportesErrores")
+          venta.document.write(string_errores);
+        }
+        else {
+          alert("Terminó el analisis correctamente");
+        }
+        //sin.print_python();
+        
+
+        ///////sin.printhtml();
+        sin.printvar();
+
+        var salida = sin.return_python();
+        document.getElementById("txtSalida").value = salida;
+
+        /*while (document.getElementById("div_Sal").firstChild) {
+          document.getElementById("div_Sal").removeChild(document.getElementById("div_Sal").firstChild);
+        }
+        ////////
+        var editor = CodeMirror.fromTextArea(document.getElementById("txtSalida"), {
+            mode: {name: "python",
+                  version: 3,
+                  singleLineStringErrors: false},
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true
+        });*/
+
+
+        var act=document.getElementById('div_Sal');
+        var tact=document.getElementById('txtSalida');
+        tact.value = salida;
+
+        while (act.firstChild) {
+            act.removeChild(act.firstChild);
+        }
+        tact.setAttribute('style','display:none');
+
+        act.appendChild(tact);
+        var editor=CodeMirror(act, {
+            lineNumbers: true,
+            value: tact.value,
+            matchBrackets: true,
+            styleActiveLine: true,
+            theme: "eclipse",
+            mode: "text/x-python"
+        }).on('change', editor => {
+            tact.value=editor.getValue();
+        });
+
+
+        ///tabla de variables
+        var tab_var = sin.Table_variables();
+        var elemento = document.getElementById('contenido-variables');
+        elemento.innerHTML = tab_var;
+
+        let sal_json = new html_json(sin.lis_html);
+        let ht = sal_json.return_html();
+        document.getElementById("txtHtml").value = ht;
+
+        let json = sal_json.return_json();
+        document.getElementById("txtJson").value = json;
+
+      
+
+    }
+
+</script>
+
+<script>
+   /* function leerArchivo(e) {
+        var archivo = e.target.files[0];
+        if (!archivo) {
+          return;
+        }
+        var lector = new FileReader();
+
+        lector.onload = function(e) {
+          var contenido = e.target.result;
+          mostrarContenido(contenido);
+        };
+        lector.readAsText(archivo);
+
+        //var elemento = document.getElementById('txtSalida');
+        //elemento.innerHTML = lector;
+
+      }
+      
+      function mostrarContenido(contenido) {
+        //var elemento = document.getElementById('contenido-archivo');
+        var elemento = document.getElementById('txtEntrada');
+        elemento.innerHTML = contenido;
+      }
+      
+      document.getElementById('file-input')
+        .addEventListener('change', leerArchivo, false);*/
+    
+    </script>
+
+<script> var string_errores; </script>
+<!---->
+
+
+<link rel="stylesheet" type="text/css" href="../css/index.css"/>
+
+<!--
+<script type="text/javascript" src="index_pes.js"></script>
+<script type="text/javascript" src="./jquery-1.7.2.min.js"></script>
+
+<script src="./codemirror/lib/codemirror.js"></script>
+<link rel="stylesheet" href="./codemirror//lib//codemirror.css">
+<link rel="stylesheet" href="./codemirror//theme//eclipse.css">
+
+<script src="./codemirror/addon/edit/matchbrackets.js"></script>
+<script src="./codemirror/mode/python/python.js"></script>
+<script src="./codemirror/mode/clike/clike.js"></script>
+
+<script src = "Lexico.js"></script>
+<script src = "Token.js"></script>
+<script src = "Errores.js"></script>
+<script src = "Sintactico.js"></script>
+<script src = "Variables.js"></script>
+<script src = "html_json.js"></script>
+-->
+
+</html>
