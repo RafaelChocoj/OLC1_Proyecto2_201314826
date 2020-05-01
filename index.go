@@ -39,7 +39,17 @@ func main() {
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js/"))))
 	*/
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css/"))))
+	http.Handle("/pesta/", http.StripPrefix("/pesta/", http.FileServer(http.Dir("pesta/"))))
+	http.Handle("/codemirror/", http.StripPrefix("/codemirror/", http.FileServer(http.Dir("codemirror/"))))
 	
+	http.Handle("/principal/", http.StripPrefix("/principal/", http.FileServer(http.Dir("principal/"))))
+	
+
+	//http.Handle("//", http.StripPrefix("//", http.FileServer(http.Dir("/"))))
+
+	//http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("//"))))
+	//http.Handle("/", "index_pes.js")
+
 	http.HandleFunc("/", index)
 	//http.HandleFunc("/")
 	//http.HandleFunc("/otrapagina",index)
