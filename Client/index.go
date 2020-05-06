@@ -27,7 +27,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		First_Name: Nombre,
 		Last_Name: Apellido,
 		Age: Edad}*/
-
 	t := template.Must(template.ParseFiles("index_pes.html"))
 	//t.Execute(w,data)
 	t.Execute(w,nil)
@@ -43,10 +42,8 @@ func main() {
 	http.Handle("/codemirror/", http.StripPrefix("/codemirror/", http.FileServer(http.Dir("codemirror/"))))
 	
 	http.Handle("/principal/", http.StripPrefix("/principal/", http.FileServer(http.Dir("principal/"))))
-	
 
 	//http.Handle("//", http.StripPrefix("//", http.FileServer(http.Dir("/"))))
-
 	//http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("//"))))
 	//http.Handle("/", "index_pes.js")
 
