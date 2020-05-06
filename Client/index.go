@@ -41,7 +41,6 @@ func main() {
 	http.Handle("/pesta/", http.StripPrefix("/pesta/", http.FileServer(http.Dir("pesta/"))))
 	http.Handle("/codemirror/", http.StripPrefix("/codemirror/", http.FileServer(http.Dir("codemirror/"))))
 	http.Handle("/conn/", http.StripPrefix("/conn/", http.FileServer(http.Dir("conn/"))))
-	
 
 	http.Handle("/principal/", http.StripPrefix("/principal/", http.FileServer(http.Dir("principal/"))))
 
@@ -54,6 +53,6 @@ func main() {
 
 	//http.HandleFunc("/otrapagina",index)
 
-	fmt.Printf("Servidor escuchando en: http://localhost:3000/")
-	http.ListenAndServe(":3000", nil)
+	fmt.Printf("Servidor escuchando en: http://localhost:8000/")
+	http.ListenAndServe(":8000", nil)
 }
