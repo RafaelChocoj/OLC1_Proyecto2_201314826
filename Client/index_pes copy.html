@@ -7,23 +7,10 @@
 
 <body>
     <h1>Compiladores 1: Proyecto 2</h1>
-     <!--para el orignal-->
-
-  <body>
-    <div id="contenido_salida" class="contenedor">
-      <h3>Archivo Principal: </h3> 
-      <input id="fileInput_or" title="Abrir2" type="file" size="50" onchange="AbrirArchivoPrincipal(this.files)" class="btnp"> 
-      <br><br>
-      <div id="div_Sal">
-        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
-      </div>
-
-    </div>
-  </body>
+    
 
     <div class="contenedor">
-      <!--<h3>Ingrese la entrada:</h3>-->
-      <h3>Ingrese Archivos a Comparar:</h3> 
+      <h3>Ingrese la entrada:</h3> 
       <input id="fileInput" title="Abrir" type="file" size="50" onchange="AbrirArchivo(this.files)" class="btnp">
       <button onclick="DescargarArchivo();" id="guardar" title="Guardar" class="btnp">Guardar</button>
       <button onclick="agregar();" title="AgregarPestana" id="btn4" class="btnp">Nuevo</button>
@@ -43,15 +30,21 @@
 
       <br>
        <button onclick="Analizar()" >Analizar</button>
-
-
-       <button onclick="Send()" >Analizar Copias</button>
   </div>
 
 
   <br><br>
   
- 
+
+  <body>
+    <div id="contenido_salida" class="contenedor">
+      <h3>Salida Python: </h3> 
+      <div id="div_Sal">
+        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
+      </div>
+
+    </div>
+  </body>
  
   <br><br>
   <!--para la consola de html-->
@@ -260,7 +253,6 @@ function rep_err(){
 <link rel="stylesheet" type="text/css" href="../css/index.css"/>
 <script type="text/javascript" src="../pesta/index_pes.js"></script>
 
-<script src="../conn/con.js"></script>
 <!--
 <script type="text/javascript" src="..index_pes.js"></script>
 -->

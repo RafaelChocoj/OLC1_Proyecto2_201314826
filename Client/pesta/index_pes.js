@@ -130,6 +130,7 @@ function quitar(){
 
 /*abrir archivo exixtente*/
 function AbrirArchivo(files){
+    /*primero agrega pestaña*/
     this.agregar()
 
     var file = files[0];
@@ -167,6 +168,50 @@ function AbrirArchivo(files){
 
     var file_input=document.getElementById("fileInput");
     document.getElementById('fileInput').value="";
+}
+
+
+/*abrir archivo exixtente*/
+function AbrirArchivoPrincipal(files){
+
+    var file = files[0];
+    var reader = new FileReader();
+    reader.onload = function (e) {
+
+        var act=document.getElementById('div_Sal');
+        var tact=document.getElementById('txtSalida');
+
+        tact.value = e.target.result;
+        var contenido = e.target.result;
+
+        //console.log(contenido);
+        //console.log("imprime algo 2");
+
+
+        while (act.firstChild) {
+            act.removeChild(act.firstChild);
+        }
+        tact.setAttribute('style','display:none');
+
+        act.appendChild(tact);
+        var editor=CodeMirror(act, {
+            lineNumbers: true,
+            value: tact.value,
+            matchBrackets: true,
+            styleActiveLine: true,
+            theme: "eclipse",
+            mode: "text/x-python"
+        }).on('change', editor => {
+            tact.value=editor.getValue();
+        });
+
+
+    };
+    reader.readAsText(file);
+    file.clear;
+
+    var file_input=document.getElementById("fileInput_or");
+    document.getElementById('fileInput_or').value="";
 }
 
 function DescargarArchivo(){
