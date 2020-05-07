@@ -1,8 +1,8 @@
 "use strict";
-exports.__esModule = true;
-var express = require("express");
-var cors = require("cors");
-var bodyParser = require("body-parser");
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 var app = express();
 app.use(bodyParser.json());
 app.use(cors());

@@ -1,5 +1,5 @@
 
-export class NodoErr{
+export class NodeErr{
 
     public tipo:string;
     public descripcion:string;
@@ -9,7 +9,7 @@ export class NodoErr{
     constructor(tipo:string,descripcion:string,linea:number,columna:number){
         this.tipo=tipo;
         this.descripcion=descripcion;
-        this.linea=(linea+1);
+        this.linea=linea;
         this.columna=(columna+1);
     }
 }

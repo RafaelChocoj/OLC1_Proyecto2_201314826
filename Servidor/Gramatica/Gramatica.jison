@@ -14,6 +14,9 @@
     const {Excepcion} = require('../utils/Exception');
     const {Type, types} = require('../utils/Type');
     const {Tree} = require('../Simbols/Tree');*/
+
+    let lis_Errores=require('../Errores/LisErrores');
+    let NError=require('../Errores/NodeErr');
 %}
 
 /*inicio Lexico*/
@@ -21,7 +24,8 @@
 %options case-insensitive
 /*expresiones regulares*/
 entero [0-9]+
-decimal {entero}("."{entero})?
+//decimal {entero}("."{entero})?
+decimal [0-9]+("."[0-9]+)?
 cadena (\"[^"]*\")
 /*cadena2*/
 //cadena [\"]([^\"\n]|\\\"")*[\"]
@@ -33,6 +37,8 @@ char [\'][^\'\n][\']
 \s+                   /* skip whitespace */
 /*expresiones regulares*/
 {decimal}            return 'decimal' 
+{entero}             return 'entero' 
+
 {cadena}             return 'cadena'
 {identificador}      return 'identificador'
 {char}               return 'char'
@@ -89,12 +95,31 @@ char [\'][^\'\n][\']
 "while"               return 'while'
 "continue"            return 'continue'
 "print"               return 'print'
+<<EOF>>	              return 'EOF'
 
-<<EOF>>	                return 'EOF'
+.           lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
 
 /lex
+
+/*inicio sintactico*/
+/*precedencia*/
+%left '+' '-'
+%left '*' '/'
 
 %start INICIO
 %% 
 
-INICIO: EOF {  };
+INICIO: EX EOF {};
+EX : EX '+' EX		    { }
+    | EX '-' EX		    { }
+    | EX '*' EX		    { }
+    | EX '/' EX	          {  }
+    | 'entero'
+    | 'decimal'				    {  }
+    | 'true'				    {  }
+    | 'false'				    {  }
+    | 'cadena'			    { }
+    | 'char'			    { }
+    | 'identificador'			          { }
+    | '(' EX ')'		          { }
+    ;
