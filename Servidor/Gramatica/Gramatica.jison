@@ -1,6 +1,6 @@
 %{
-    /*const {Primitive} = require('../Expresiones/Primitive');
-    const {Arithmetic} = require('../Expresiones/Arithmetic');
+    const {Primitive} = require('../Expresiones/Primitive');
+    /*const {Arithmetic} = require('../Expresiones/Arithmetic');
     const {Relational} = require('../Expresiones/Relational');
     const {Continue} = require('../Expresiones/Continue');
     const {Break} = require('../Expresiones/Break');
@@ -11,9 +11,9 @@
     const {While} = require('../Instrucciones/While');
     const {Declaracion} = require('../Instrucciones/Declaracion');
     const {Asignacion} = require('../Instrucciones/Asignacion');
-    const {Excepcion} = require('../utils/Exception');
-    const {Type, types} = require('../utils/Type');
-    const {Tree} = require('../Simbols/Tree');*/
+    const {Excepcion} = require('../utils/Exception');*/
+    const {Tipo, types} = require('../Abstracto/Tipo');
+    //const {Tree} = require('../Simbols/Tree');*/
 
     let lis_Errores=require('../Errores/LisErrores');
     let NError=require('../Errores/NodeErr');
@@ -79,7 +79,7 @@ char [\'][^\'\n][\']
 "double"              return 'double'
 "boolean"             return 'boolean'
 "char"                return 'char'
-"string"              return 'string'
+"String"              return 'String'
 
 "true"                return 'true'
 "false"               return 'false'
@@ -103,23 +103,50 @@ char [\'][^\'\n][\']
 
 /*inicio sintactico*/
 /*precedencia*/
+
+%left '||'
+%left '&&'
+/*logicos*/
+%left '==', '!='
+%left '>=', '<=', '<', '>'
+/*arimeticos*/
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' 'mod'
+%left UMENOS //signo menos
+%left '^' 
+%right '!'
 
 %start INICIO
 %% 
 
 INICIO: EX EOF {};
-EX : EX '+' EX		    { }
-    | EX '-' EX		    { }
-    | EX '*' EX		    { }
-    | EX '/' EX	          {  }
-    | 'entero'
-    | 'decimal'				    {  }
-    | 'true'				    {  }
-    | 'false'				    {  }
-    | 'cadena'			    { }
-    | 'char'			    { }
-    | 'identificador'			          { }
-    | '(' EX ')'		          { }
+
+EX : '-' EX %prec UMENOS	    { /*$$ = new Arithmetic($1, null, '-', _$.first_line, _$.first_column);*/ }
+    | '!' EX	 { }
+    
+    | EX '+' EX		  { $$ = new Arithmetica($1, $3, '+', _$.first_line, _$.first_column); }
+    | EX '-' EX		  { }
+    | EX '*' EX		  { }
+    | EX '/' EX	      { }
+    | EX '^' EX	      { }
+    | EX 'mod' EX	  { }
+    
+    | EX '<' EX		    { /*$$ = new Relational($1, $3, '<', _$.first_line, _$.first_column);*/ }
+    | EX '>' EX		    { /*$$ = new Relational($1, $3, '>', _$.first_line, _$.first_column); */}
+    | EX '>=' EX	    { /*$$ = new Relational($1, $3, '>=', _$.first_line, _$.first_column); */}
+    | EX '<=' EX	    { /*$$ = new Relational($1, $3, '<=', _$.first_line, _$.first_column);*/ }
+    | EX '==' EX	    { /*$$ = new Relational($1, $3, '==', _$.first_line, _$.first_column); */}
+    | EX '!=' EX	    { /*$$ = new Relational($1, $3, '!=', _$.first_line, _$.first_column); */}
+
+    | EX '||' EX	    { /*$$ = new Logic($1, $3, '&&', _$.first_line, _$.first_column);*/ }
+    | EX '&&' EX	    { /*$$ = new Logic($1, $3, '||', _$.first_line, _$.first_column);*/ }
+
+    | 'entero'      { $$ = new Primitive(new Tipo(types.int), Number($1), _$.first_line, _$.first_column);}
+    | 'decimal'     { $$ = new Primitive(new Tipo(types.decimal), Number($1), _$.first_line, _$.first_column); }
+    | 'true'        {  }
+    | 'false'       {  }
+    | 'cadena'		{ }
+    | 'char'		{ }
+    | 'identificador'	{ }
+    | '(' EX ')'		{ }
     ;
