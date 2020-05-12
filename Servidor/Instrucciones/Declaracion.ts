@@ -23,7 +23,7 @@ export class Declaracion extends Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Tipo ("+ this.type+")");
             for (let i:Number = 0; i < this.identificador.length; i++)
             {
-                tree.arbol_ast.push("<li>"+this.identificador[i] +"</li>");
+                tree.arbol_ast.push("<li>identificador ("+this.identificador[i] +")</li>");
                 //console.log(this.identificador[i]);
             }
             if (this.value != null) {

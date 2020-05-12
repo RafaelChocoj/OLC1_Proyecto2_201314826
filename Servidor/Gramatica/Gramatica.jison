@@ -10,6 +10,8 @@
     const {Imprimir} = require('../Instrucciones/Imprimir');
     /*const {If} = require('../Instrucciones/If');*/
     const {While} = require('../Instrucciones/While');
+    const {DoWhile} = require('../Instrucciones/DoWhile');
+    const {For} = require('../Instrucciones/For');
     const {Declaracion} = require('../Instrucciones/Declaracion');
     const {Asignacion} = require('../Instrucciones/Asignacion');
     //const {Excepcion} = require('../utils/Exception');*/
@@ -49,7 +51,9 @@ char [\'][^\'\n][\']
 /*artimeticas*/
 "*"                   return '*'
 "/"                   return '/'
+"--"                   return '--'
 "-"                   return '-'
+"++"                   return '++'
 "+"                   return '+'
 "*"                   return '*'
 "^"                   return '^'
@@ -97,6 +101,9 @@ char [\'][^\'\n][\']
 
 "while"               return 'while'
 "do"                  return 'do'
+
+"for"                 return 'for'
+
 "continue"            return 'continue'
 
 //"print"               return 'print'
@@ -124,6 +131,7 @@ char [\'][^\'\n][\']
 /*arimeticos*/
 %left '+' '-'
 %left '*' '/' 'mod'
+%left '++' '--'
 %left UMENOS //signo menos
 %left '^' 
 %right '!'
@@ -144,6 +152,7 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | PRINT {$$ = $1;}
             | WHILE {$$ = $1;}
             | DOWHILE {$$ = $1;}
+            | FOR {$$ = $1;}
             ;
 
 
@@ -168,9 +177,14 @@ BLOQUE_LISINSTRUCCIONES : '{' LIS_INSTRUCCIONES '}' {$$ = $2;}
 CONDICION : '(' EX ')' {$$ = $2;}
           ;
 
-DOWHILE : 'do' BLOQUE_LISINSTRUCCIONES 'while' CONDICION ';' {$$ = new While($4, $2, _$.first_line, _$.first_column);}
+CON_FOR : EX  {$$ = $1;}
+          ;
+
+DOWHILE : 'do' BLOQUE_LISINSTRUCCIONES 'while' CONDICION ';' {$$ = new DoWhile($4, $2, _$.first_line, _$.first_column);}
         ;
 
+FOR : 'for' '(' CON_FOR ')' BLOQUE_LISINSTRUCCIONES {$$ = new For($3, $5, _$.first_line, _$.first_column);}
+      ;
 /*fin sentencias*/
 
 TIPO : 'int' {$$ = new Tipo(types.int);}
@@ -187,9 +201,12 @@ PRINT : 'System' '.' 'out' '.' 'print' '(' EX ')' ';' { $$ = new Imprimir($7, _$
       ;
 
 
-EX : '-' EX %prec UMENOS	    { /*$$ = new Arithmetic($1, null, '-', _$.first_line, _$.first_column);*/ }
+EX : '-' EX %prec UMENOS	    { $$ = new Aritmetica($2, null, '-', _$.first_line, _$.first_column); }
     | '!' EX	 { }
     
+    | EX '++'		  { $$ = new Aritmetica($1, null, '++', _$.first_line, _$.first_column); }
+    | EX '--'		  { $$ = new Aritmetica($1, null, '--', _$.first_line, _$.first_column); }
+
     | EX '+' EX		  { $$ = new Aritmetica($1, $3, '+', _$.first_line, _$.first_column); }
     | EX '-' EX		  { $$ = new Aritmetica($1, $3, '-', _$.first_line, _$.first_column); }
     | EX '*' EX		  { $$ = new Aritmetica($1, $3, '*', _$.first_line, _$.first_column); }

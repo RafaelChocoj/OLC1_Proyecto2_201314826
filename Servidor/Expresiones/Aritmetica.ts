@@ -35,7 +35,9 @@ export class Aritmetica extends Node {
        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Aritmetica");
        tree.arbol_ast.push("<ul>");
        const result = this.iz_Operator.execute(tree);
-       const result2 = this.der_Operator.execute(tree);
+       if (this.der_Operator != null) {
+            const result2 = this.der_Operator.execute(tree);
+       }
        //console.log("</ul>");
        tree.arbol_ast.push("</ul>");
 

@@ -25,6 +25,12 @@ var entrada = "do {\n"+
 "System.out.print(\"0777-Compiladores 1\"); int a,s2;"+
 "} while(1>a || a ==b);";
 
+var entrada = "int a = 25+3; a2 = b++;";
+
+var entrada = "int k;"+
+"for(/*k=15;*/ k>5 /*; k--*/){ /* Sentencias */ a = 'd'; }";
+
+
 //var entrada = "((5>2) && (num1 == 58)) ";
 //var entrada = "!true@";
 var resultado=parser(entrada);
