@@ -7,15 +7,10 @@ var types;
     types[types["double"] = 2] = "double";
     types[types["boolean"] = 3] = "boolean";
     types[types["char"] = 4] = "char";
-    types[types["string"] = 5] = "string";
+    types[types["String"] = 5] = "String";
+    types[types["VOID"] = 6] = "VOID";
 })(types = exports.types || (exports.types = {}));
 class Tipo {
-    /**
-     *
-     * @constructor Crea un nuevo tipo con el tipo primitivo indicado en el enum
-     * @param type Tipo seleccionado para la variable o funcion
-     *
-     */
     constructor(type) {
         this.type = type;
     }
@@ -35,8 +30,8 @@ class Tipo {
         else if (this.type === types.char) {
             return 'char';
         }
-        else if (this.type === types.string) {
-            return 'string';
+        else if (this.type === types.String) {
+            return 'String';
         }
     }
 }

@@ -10,6 +10,8 @@ class Primitive extends Node_1.Node {
      * @param tree Arbol de instrucciones y excepciones
      */
     execute(tree) {
+        //console.log("<li>Primitivo ("+ this.type+")</li>");
+        tree.arbol_ast.push("<li>Primitivo (" + this.type + ")</li>");
         return this.value;
     }
 }

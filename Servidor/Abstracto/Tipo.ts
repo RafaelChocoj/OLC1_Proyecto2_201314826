@@ -4,18 +4,14 @@ export enum types {
     double,
     boolean,
     char,
-    string
+    String,
+    VOID
 }
 
 export class Tipo{
     type : types;
 
-    /**
-     * 
-     * @constructor Crea un nuevo tipo con el tipo primitivo indicado en el enum
-     * @param type Tipo seleccionado para la variable o funcion
-     * 
-     */
+
     constructor(type: types){
         this.type = type;
     }
@@ -31,8 +27,8 @@ export class Tipo{
             return 'boolean';
         }else if(this.type === types.char){
             return 'char';
-        }else if(this.type === types.string){
-            return 'string';
+        }else if(this.type === types.String){
+            return 'String';
         }
         
     }

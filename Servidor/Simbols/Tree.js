@@ -8,6 +8,7 @@ class Tree {
         this.instructions = instructions;
         //this.excepciones = new Array<Exception>();
         this.console = new Array();
+        this.arbol_ast = new Array();
     }
 }
 exports.Tree = Tree;

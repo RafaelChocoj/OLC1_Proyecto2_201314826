@@ -1,5 +1,6 @@
 import {Tree} from "../Simbols/Tree";
 import {Tipo} from "./Tipo";
+import {types} from "./Tipo";
 
 export abstract class Node {
 
