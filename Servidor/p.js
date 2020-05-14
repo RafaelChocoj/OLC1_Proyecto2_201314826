@@ -19,9 +19,9 @@ var entrada = "do {\n" +
 var entrada = "int a = 25+3; a2 = b++;";
 var entrada = "int k;" +
     "for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }";
-var entrada = "If( 3 < 4) { /* Sentencias */ }";
-//else if (2 < 5) { /* Sentencias */ }
-//else { /* Sentencias */ }
+var entrada = "If( 3 < 4) { /* Sentencias */ char a = 'd'; }" +
+    "else if (2 < 5) {System.out.print(\"en el elsiif\");}" +
+    "else { b = 2;}";
 //If(true) { /* Sentencias */ }
 //If(false){ /* Sentencias */ }
 //else { /* Sentencias */ }

@@ -8,7 +8,7 @@
     
     const {Identificador} = require('../Expresiones/Identificador');
     const {Imprimir} = require('../Instrucciones/Imprimir');
-    //const {If} = require('../Instrucciones/If');
+    const {If} = require('../Instrucciones/If');
     const {While} = require('../Instrucciones/While');
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {For} = require('../Instrucciones/For');
@@ -200,6 +200,13 @@ IF : 'if' CONDICION BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, [], _$.first_li
    | 'if' CONDICION BLOQUE_LISINSTRUCCIONES 'else' BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, $5, _$.first_line, _$.first_column);}
    | 'if' CONDICION BLOQUE_LISINSTRUCCIONES 'else' IF {$$ = new If($2, $3, [$5], _$.first_line, _$.first_column);}
    ;
+
+SWITCH : 'switch' CONDICION '{' BLOQUE_LISINSTRUCCIONES '}' {$$ = new While($2, $3, _$.first_line, _$.first_column);}
+      ;
+
+LIS_CASE : LIS_CASE ',' identificador  { $$ = $1; $$.push($3); }
+      | identificador { $$ = [$1]; }
+      ;
 /*fin sentencias*/
 
 TIPO : 'int' {$$ = new Tipo(types.int);}

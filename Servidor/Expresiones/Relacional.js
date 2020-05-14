@@ -12,7 +12,7 @@ class Relacional extends Node_1.Node {
     execute(tree) {
         //console.log("<li data-jstree='{ \"opened\" : true }'>Aritmetica");
         //console.log("<ul>");
-        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Relacional");
+        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Relacional " + this.Operator);
         tree.arbol_ast.push("<ul>");
         const result = this.iz_Operator.execute(tree);
         const result2 = this.der_Operator.execute(tree);
