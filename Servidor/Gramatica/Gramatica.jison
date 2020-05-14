@@ -8,7 +8,7 @@
     
     const {Identificador} = require('../Expresiones/Identificador');
     const {Imprimir} = require('../Instrucciones/Imprimir');
-    /*const {If} = require('../Instrucciones/If');*/
+    //const {If} = require('../Instrucciones/If');
     const {While} = require('../Instrucciones/While');
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {For} = require('../Instrucciones/For');
@@ -123,6 +123,9 @@ char [\'][^\'\n][\']
 /*precedencia*/
 %left '='
 %left ',' //para listado de id
+
+%left 'else'
+
 %left '||'
 %left '&&'
 /*logicos*/
@@ -132,9 +135,12 @@ char [\'][^\'\n][\']
 %left '+' '-'
 %left '*' '/' 'mod'
 %left '++' '--'
-%left UMENOS //signo menos
-%left '^' 
+
 %right '!'
+%left '^' 
+%left UMENOS //signo menos
+
+
 
 %start INICIO
 %% 
@@ -153,6 +159,7 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | WHILE {$$ = $1;}
             | DOWHILE {$$ = $1;}
             | FOR {$$ = $1;}
+            | IF {$$ = $1;}
             ;
 
 
@@ -183,8 +190,16 @@ CON_FOR : EX  {$$ = $1;}
 DOWHILE : 'do' BLOQUE_LISINSTRUCCIONES 'while' CONDICION ';' {$$ = new DoWhile($4, $2, _$.first_line, _$.first_column);}
         ;
 
-FOR : 'for' '(' CON_FOR ')' BLOQUE_LISINSTRUCCIONES {$$ = new For($3, $5, _$.first_line, _$.first_column);}
+FOR : 'for' '(' INIFOR CON_FOR ';' EX ')' BLOQUE_LISINSTRUCCIONES {$$ = new For($3, $4, $6, $8, _$.first_line, _$.first_column);}
       ;
+INIFOR : DECLARACION {$$ = $1;}
+        | ASIGNACION {$$ = $1;}
+        ;
+
+IF : 'if' CONDICION BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, [], _$.first_line, _$.first_column);}
+   | 'if' CONDICION BLOQUE_LISINSTRUCCIONES 'else' BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, $5, _$.first_line, _$.first_column);}
+   | 'if' CONDICION BLOQUE_LISINSTRUCCIONES 'else' IF {$$ = new If($2, $3, [$5], _$.first_line, _$.first_column);}
+   ;
 /*fin sentencias*/
 
 TIPO : 'int' {$$ = new Tipo(types.int);}

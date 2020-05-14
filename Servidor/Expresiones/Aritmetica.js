@@ -20,7 +20,7 @@ class Aritmetica extends Node_1.Node {
         //console.log("ar: " + v_izq + this.Operator + v_der);
         //console.log("<li data-jstree='{ \"opened\" : true }'>Aritmetica");
         //console.log("<ul>");
-        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Aritmetica");
+        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Aritmetica " + this.Operator);
         tree.arbol_ast.push("<ul>");
         const result = this.iz_Operator.execute(tree);
         if (this.der_Operator != null) {

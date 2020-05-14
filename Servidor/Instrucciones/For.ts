@@ -6,12 +6,17 @@ import { types } from "../Abstracto/Tipo";
 
 
 export class For extends Node {
+    inicial: Node;
     condition: Node;
     List: Array<Node>;
 
-    constructor(condition: Node, List:Array<Node>, line: Number, column: Number) {
+    incredecre: Node;
+
+    constructor(inicial:Node, condition: Node, incredecre: Node, List:Array<Node>, line: Number, column: Number) {
         super(null, line, column);
+        this.inicial = inicial;
         this.condition = condition;
+        this.incredecre = incredecre;
         this.List = List;
     }
 
@@ -19,10 +24,22 @@ export class For extends Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>For");
         tree.arbol_ast.push("<ul>");
 
+            tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Inicial");
+            tree.arbol_ast.push("<ul>");
+                let inic: Node;
+                inic = this.inicial.execute(tree);
+            tree.arbol_ast.push("</ul>");
+
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Condicion");
             tree.arbol_ast.push("<ul>");
-            let result: Node;
-            result = this.condition.execute(tree);
+                let result: Node;
+                result = this.condition.execute(tree);
+            tree.arbol_ast.push("</ul>");
+
+            tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Incremento-Decremento");
+            tree.arbol_ast.push("<ul>");
+                let incre: Node;
+                incre = this.incredecre.execute(tree);
             tree.arbol_ast.push("</ul>");
 
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
