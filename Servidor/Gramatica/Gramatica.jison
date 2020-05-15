@@ -12,6 +12,9 @@
     const {While} = require('../Instrucciones/While');
     const {DoWhile} = require('../Instrucciones/DoWhile');
     const {For} = require('../Instrucciones/For');
+    const {Switch} = require('../Instrucciones/Switch');
+    const {CaseSwitch} = require('../Instrucciones/CaseSwitch');
+    
     const {Declaracion} = require('../Instrucciones/Declaracion');
     const {Asignacion} = require('../Instrucciones/Asignacion');
     //const {Excepcion} = require('../utils/Exception');*/
@@ -111,6 +114,7 @@ char [\'][^\'\n][\']
 "out"                  return 'out'
 "print"                return 'print'
 "."                    return '.'
+":"                    return ':'
 
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
@@ -160,6 +164,7 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | DOWHILE {$$ = $1;}
             | FOR {$$ = $1;}
             | IF {$$ = $1;}
+            | SWITCH {/*$$ = $1;*/}
             ;
 
 
@@ -181,6 +186,10 @@ WHILE : 'while' CONDICION BLOQUE_LISINSTRUCCIONES {$$ = new While($2, $3, _$.fir
 BLOQUE_LISINSTRUCCIONES : '{' LIS_INSTRUCCIONES '}' {$$ = $2;}
                      | '{' '}' {$$ = [];}
                      ;
+
+CASE_LISINSTRUCCIONES : LIS_INSTRUCCIONES  {$$ = $1;}
+                     |  {$$ = []; console.log("no tiene lista d einstruc"); }
+                     ;
 CONDICION : '(' EX ')' {$$ = $2;}
           ;
 
@@ -201,12 +210,20 @@ IF : 'if' CONDICION BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, [], _$.first_li
    | 'if' CONDICION BLOQUE_LISINSTRUCCIONES 'else' IF {$$ = new If($2, $3, [$5], _$.first_line, _$.first_column);}
    ;
 
-SWITCH : 'switch' CONDICION '{' BLOQUE_LISINSTRUCCIONES '}' {$$ = new While($2, $3, _$.first_line, _$.first_column);}
+//SWITCH : 'switch' CONDICION '{' LIS_CASES C_DEFAULT '}' { $$ = new Switch($2, $3, $4, $5, _$.first_line, _$.first_column);  }
+SWITCH : 'switch' CONDICION '{' LIS_CASES '}' { $$ = new Switch($2, $4, _$.first_line, _$.first_column);  }
       ;
 
-LIS_CASE : LIS_CASE ',' identificador  { $$ = $1; $$.push($3); }
-      | identificador { $$ = [$1]; }
+LIS_CASES : LIS_CASES CASE { $$ = $1; $$.push($2); }
+      | CASE { $$ = [$1]; }
+      //|  { $$ = [];}
       ;
+CASE : 'case' EX ':' CASE_LISINSTRUCCIONES { $$ = new CaseSwitch($2, $4, _$.first_line, _$.first_column); }
+      ;
+
+C_DEFAULT : 'default' ':' CASE_LISINSTRUCCIONES { /*$$ = [$1]; */} 
+            | {/*$$ = [];*/ }
+            ;
 /*fin sentencias*/
 
 TIPO : 'int' {$$ = new Tipo(types.int);}

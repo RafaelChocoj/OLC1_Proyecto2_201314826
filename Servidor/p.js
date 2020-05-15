@@ -22,6 +22,21 @@ var entrada = "int k;" +
 var entrada = "If( 3 < 4) { /* Sentencias */ char a = 'd'; }" +
     "else if (2 < 5) {System.out.print(\"en el elsiif\");}" +
     "else { b = 2;}";
+var entrada = "switch (3*54) {\n" +
+    // "case 3: // Sentencias\n"+
+    // "If( 3 < 4) { }"+
+    // " int a,b;"+
+    //"break;"+
+    // " case 5: "+
+    //"// Sentencias\n"+
+    //" case 7: "+
+    //"bb = 1+2;"+
+    //  "// Sentencias\n"+
+    //"break;"+
+    //" default: "+
+    //  "// Sentencias\n"+
+    //"break;"+
+    "}";
 //If(true) { /* Sentencias */ }
 //If(false){ /* Sentencias */ }
 //else { /* Sentencias */ }
