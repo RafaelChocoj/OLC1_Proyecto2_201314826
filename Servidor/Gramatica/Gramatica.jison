@@ -14,6 +14,11 @@
     const {For} = require('../Instrucciones/For');
     const {Switch} = require('../Instrucciones/Switch');
     const {CaseSwitch} = require('../Instrucciones/CaseSwitch');
+    const {DefaultSwitch} = require('../Instrucciones/DefaultSwitch');
+
+    const {VoidMain} = require('../ClasesF/VoidMain');
+    const {Metodo} = require('../ClasesF/Metodo');
+    const {Parametros} = require('../ClasesF/Parametros');
     
     const {Declaracion} = require('../Instrucciones/Declaracion');
     const {Asignacion} = require('../Instrucciones/Asignacion');
@@ -113,8 +118,12 @@ char [\'][^\'\n][\']
 "System"               return 'System'
 "out"                  return 'out'
 "print"                return 'print'
+"println"              return 'println'
 "."                    return '.'
 ":"                    return ':'
+
+"void"                return 'void'
+"main"                return 'main'
 
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
@@ -164,7 +173,13 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | DOWHILE {$$ = $1;}
             | FOR {$$ = $1;}
             | IF {$$ = $1;}
-            | SWITCH {/*$$ = $1;*/}
+            | SWITCH {$$ = $1;}
+
+            /*probando otros*/
+            | MAIN {$$ = $1;}
+            | METODO {$$ = $1;}
+            
+
             ;
 
 
@@ -188,7 +203,7 @@ BLOQUE_LISINSTRUCCIONES : '{' LIS_INSTRUCCIONES '}' {$$ = $2;}
                      ;
 
 CASE_LISINSTRUCCIONES : LIS_INSTRUCCIONES  {$$ = $1;}
-                     |  {$$ = []; console.log("no tiene lista d einstruc"); }
+                     |  {$$ = []; }
                      ;
 CONDICION : '(' EX ')' {$$ = $2;}
           ;
@@ -211,7 +226,8 @@ IF : 'if' CONDICION BLOQUE_LISINSTRUCCIONES {$$ = new If($2, $3, [], _$.first_li
    ;
 
 //SWITCH : 'switch' CONDICION '{' LIS_CASES C_DEFAULT '}' { $$ = new Switch($2, $3, $4, $5, _$.first_line, _$.first_column);  }
-SWITCH : 'switch' CONDICION '{' LIS_CASES '}' { $$ = new Switch($2, $4, _$.first_line, _$.first_column);  }
+SWITCH : 'switch' CONDICION '{' LIS_CASES C_DEFAULT '}' { $$ = new Switch($2, $4, $5, _$.first_line, _$.first_column);  }
+       | 'switch' CONDICION '{' C_DEFAULT '}' { $$ = new Switch($2, [], $4, _$.first_line, _$.first_column);  }
       ;
 
 LIS_CASES : LIS_CASES CASE { $$ = $1; $$.push($2); }
@@ -220,10 +236,12 @@ LIS_CASES : LIS_CASES CASE { $$ = $1; $$.push($2); }
       ;
 CASE : 'case' EX ':' CASE_LISINSTRUCCIONES { $$ = new CaseSwitch($2, $4, _$.first_line, _$.first_column); }
       ;
-
-C_DEFAULT : 'default' ':' CASE_LISINSTRUCCIONES { /*$$ = [$1]; */} 
-            | {/*$$ = [];*/ }
+C_DEFAULT : 'default' ':' CASE_LISINSTRUCCIONES { $$ = [new DefaultSwitch( $3, _$.first_line, _$.first_column)]; } 
+            | {$$ = []; }
             ;
+/*C_DEFAULT : 'default' ':' CASE_LISINSTRUCCIONES { $$ = $3; } 
+            | {$$ = []; }
+            ;*/
 /*fin sentencias*/
 
 TIPO : 'int' {$$ = new Tipo(types.int);}
@@ -237,8 +255,23 @@ ASIGNACION : identificador '=' EX ';' { $$ = new Asignacion($1, $3, _$.first_lin
            ;
 
 PRINT : 'System' '.' 'out' '.' 'print' '(' EX ')' ';' { $$ = new Imprimir($7, _$.first_line, _$.first_column);}
+      | 'System' '.' 'out' '.' 'println' '(' EX ')' ';' { $$ = new Imprimir($7, _$.first_line, _$.first_column);}
+      ;
+/*inicio funciones, eventos*/
+MAIN : 'void' 'main' '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new VoidMain( $5, _$.first_line, _$.first_column); }
+      ;
+METODO : 'void' identificador '(' LIS_PARAMETROS ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, $4, $6, _$.first_line, _$.first_column); }
+      |  'void' identificador '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, [], $5, _$.first_line, _$.first_column); }
       ;
 
+FUNCION : TIPO identificador '(' LIS_PARAMETROS ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, $4, $6, _$.first_line, _$.first_column); }
+       |  TIPO identificador '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, [], $5, _$.first_line, _$.first_column); }
+       ;
+
+LIS_PARAMETROS : LIS_PARAMETROS ',' TIPO identificador  { $$ = $1; $$.push(new Parametros( $3, $4, _$.first_line, _$.first_column)); }
+      | TIPO identificador { $$ = [new Parametros( $1, $2, _$.first_line, _$.first_column)]; }
+      ;
+/**/
 
 EX : '-' EX %prec UMENOS	    { $$ = new Aritmetica($2, null, '-', _$.first_line, _$.first_column); }
     | '!' EX	 { }

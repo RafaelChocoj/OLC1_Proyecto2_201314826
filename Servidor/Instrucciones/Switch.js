@@ -2,12 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../Abstracto/Node");
 class Switch extends Node_1.Node {
-    //ElseList: Array<Node>;
-    constructor(expresion, CasesList, line, column) {
+    constructor(expresion, CasesList, defaulList, line, column) {
         super(null, line, column);
         this.expresion = expresion;
         this.CasesList = CasesList;
-        //this.ElseList = ElseList;
+        this.defaulList = defaulList;
     }
     execute(tree) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Switch");
@@ -27,6 +26,17 @@ class Switch extends Node_1.Node {
            }*/
         }
         //tree.arbol_ast.push("</ul>");
+        //}
+        //if (this.defaulList.length > 0 ){
+        //    tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
+        //    tree.arbol_ast.push("<ul>");
+        for (let i = 0; i < this.defaulList.length; i++) {
+            const res = this.defaulList[i].execute(tree);
+            /*if(res instanceof Continue || res instanceof Break){
+               return res;
+           }*/
+        }
+        //   tree.arbol_ast.push("</ul>");
         //}
         tree.arbol_ast.push("</ul>");
     }

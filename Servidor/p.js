@@ -23,20 +23,34 @@ var entrada = "If( 3 < 4) { /* Sentencias */ char a = 'd'; }" +
     "else if (2 < 5) {System.out.print(\"en el elsiif\");}" +
     "else { b = 2;}";
 var entrada = "switch (3*54) {\n" +
-    // "case 3: // Sentencias\n"+
-    // "If( 3 < 4) { }"+
-    // " int a,b;"+
+    "case 3: // Sentencias\n" +
+    "If( 3 < 4) { }" +
+    //" int a,b;"+
     //"break;"+
     // " case 5: "+
     //"// Sentencias\n"+
+    //  "// Sentencias\n"+
+    //"break;"+
+    " default: " +
+    //  "// Sentencias\n"+
+    //"break;"+
     //" case 7: "+
-    //"bb = 1+2;"+
-    //  "// Sentencias\n"+
-    //"break;"+
-    //" default: "+
-    //  "// Sentencias\n"+
-    //"break;"+
+    "bb = 1+2;" +
     "}";
+var entrada = "//Llamada a un metodo\n" +
+    "metodo1();" +
+    "//Llamada a una funcion\n" +
+    "double pot = potencia(5,3);";
+var entrada = "void main() {" +
+    "System.out.println(\"7 elevado al cubo es: \"+3);" +
+    "}\n" +
+    "double potencia(double n1, double n2){" +
+    "  double resultado = n1^ n2;" +
+    "  return resultado;" +
+    "  }" +
+    "void imprime_salida() { //Metodo declarado \n" +
+    "  a = 55; " +
+    "} ";
 //If(true) { /* Sentencias */ }
 //If(false){ /* Sentencias */ }
 //else { /* Sentencias */ }

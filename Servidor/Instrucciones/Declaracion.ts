@@ -20,6 +20,7 @@ export class Declaracion extends Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Declaracion");
         tree.arbol_ast.push("<ul>");
 
+
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Tipo ("+ this.type+")");
             for (let i = 0; i < this.identificador.length; i++)
             {

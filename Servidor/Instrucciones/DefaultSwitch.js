@@ -1,23 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../Abstracto/Node");
-class CaseSwitch extends Node_1.Node {
+class DefaultSwitch extends Node_1.Node {
     //ElseList: Array<Node>;
-    constructor(expre, ListInstruc, line, column) {
+    constructor(ListInstruc, line, column) {
         super(null, line, column);
-        this.expre = expre;
         this.ListInstruc = ListInstruc;
     }
     execute(tree) {
-        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Case");
+        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
         tree.arbol_ast.push("<ul>");
-        if (this.expre != null) {
-            tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Expresion");
-            tree.arbol_ast.push("<ul>");
-            let exp;
-            exp = this.expre.execute(tree);
-            tree.arbol_ast.push("</ul>");
-        }
         if (this.ListInstruc.length > 0) {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
             tree.arbol_ast.push("<ul>");
@@ -32,4 +24,4 @@ class CaseSwitch extends Node_1.Node {
         tree.arbol_ast.push("</ul>");
     }
 }
-exports.CaseSwitch = CaseSwitch;
+exports.DefaultSwitch = DefaultSwitch;

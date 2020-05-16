@@ -3,30 +3,21 @@ import { Tree } from "../Simbols/Tree";
 import { types } from "../Abstracto/Tipo";
 
 
-export class CaseSwitch extends Node {
-    expre: Node;
+export class DefaultSwitch extends Node {
     ListInstruc: Array<Node>;
     //ElseList: Array<Node>;
 
-    constructor(expre: Node, ListInstruc: Array<Node>, line: Number, column: Number) {
+    constructor(ListInstruc: Array<Node>, line: Number, column: Number) {
         super(null, line, column);
-        this.expre = expre;
         this.ListInstruc = ListInstruc;
     }
 
 
     execute(tree: Tree) {
 
-        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Case");
+        tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
         tree.arbol_ast.push("<ul>");
-
-            if (this.expre != null){
-                tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Expresion");
-                tree.arbol_ast.push("<ul>");
-                let exp: Node;
-                exp = this.expre.execute(tree);      
-                tree.arbol_ast.push("</ul>");
-            }
+        
 
             if (this.ListInstruc.length > 0 ){
                 tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");

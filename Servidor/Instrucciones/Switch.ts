@@ -6,13 +6,13 @@ import { types } from "../Abstracto/Tipo";
 export class Switch extends Node {
     expresion: Node;
     CasesList: Array<Node>;
-    //ElseList: Array<Node>;
+    defaulList: Array<Node>;
 
-    constructor(expresion: Node, CasesList: Array<Node>, line: Number, column: Number) {
+    constructor(expresion: Node, CasesList: Array<Node>, defaulList: Array<Node>, line: Number, column: Number) {
         super(null, line, column);
         this.expresion = expresion;
         this.CasesList = CasesList;
-        //this.ElseList = ElseList;
+        this.defaulList = defaulList;
     }
 
 
@@ -37,6 +37,19 @@ export class Switch extends Node {
                    }*/
                }
                //tree.arbol_ast.push("</ul>");
+            //}
+
+            //if (this.defaulList.length > 0 ){
+            //    tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
+            //    tree.arbol_ast.push("<ul>");
+                for (let i = 0; i < this.defaulList.length; i++) {
+                    const res = this.defaulList[i].execute(tree);
+                    /*if(res instanceof Continue || res instanceof Break){
+                       return res;
+                   }*/
+               }
+            //   tree.arbol_ast.push("</ul>");
+            
             //}
 
 
