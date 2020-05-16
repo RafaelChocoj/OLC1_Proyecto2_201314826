@@ -37,20 +37,21 @@ var entrada = "switch (3*54) {\n" +
     //" case 7: "+
     "bb = 1+2;" +
     "}";
-var entrada = "//Llamada a un metodo\n" +
-    "metodo1();" +
-    "//Llamada a una funcion\n" +
-    "double pot = potencia(5,3);";
 var entrada = "void main() {" +
     "System.out.println(\"7 elevado al cubo es: \"+3);" +
     "}\n" +
     "double potencia(double n1, double n2){" +
     "  double resultado = n1^ n2;" +
-    "  return resultado;" +
+    //"  return resultado;"+
     "  }" +
     "void imprime_salida() { //Metodo declarado \n" +
     "  a = 55; " +
     "} ";
+var entrada = "//Llamada a un metodo\n" +
+    //"metodo1();"+
+    "//Llamada a una funcion\n" +
+    //"double pot = potencia(5,3, \"cadena\", 5*3+1);";
+    "int llamada = suma(numero1, 5*8+6)-resta(numero1, 5*8+6) * (multiplicacion(numero1, 5*8+6)/ division(numero1, 5*8+6));";
 //If(true) { /* Sentencias */ }
 //If(false){ /* Sentencias */ }
 //else { /* Sentencias */ }

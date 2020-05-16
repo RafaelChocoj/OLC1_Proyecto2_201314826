@@ -19,6 +19,9 @@
     const {VoidMain} = require('../ClasesF/VoidMain');
     const {Metodo} = require('../ClasesF/Metodo');
     const {Parametros} = require('../ClasesF/Parametros');
+    const {Funcion} = require('../ClasesF/Funcion');
+    const {ParametroCall} = require('../ClasesF/ParametroCall');
+    const {LlamadaF} = require('../ClasesF/LlamadaF');
     
     const {Declaracion} = require('../Instrucciones/Declaracion');
     const {Asignacion} = require('../Instrucciones/Asignacion');
@@ -178,8 +181,10 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             /*probando otros*/
             | MAIN {$$ = $1;}
             | METODO {$$ = $1;}
-            
+            | FUNCION {$$ = $1;}
 
+            | LLAMADA_FUN {$$ = $1;}
+      
             ;
 
 
@@ -264,13 +269,21 @@ METODO : 'void' identificador '(' LIS_PARAMETROS ')' BLOQUE_LISINSTRUCCIONES  { 
       |  'void' identificador '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, [], $5, _$.first_line, _$.first_column); }
       ;
 
-FUNCION : TIPO identificador '(' LIS_PARAMETROS ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, $4, $6, _$.first_line, _$.first_column); }
-       |  TIPO identificador '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Metodo($2, [], $5, _$.first_line, _$.first_column); }
+FUNCION : TIPO identificador '(' LIS_PARAMETROS ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Funcion($1, $2, $4, $6, _$.first_line, _$.first_column); }
+       |  TIPO identificador '(' ')' BLOQUE_LISINSTRUCCIONES  { $$ = new Funcion($1, $2, [], $5, _$.first_line, _$.first_column); }
        ;
 
 LIS_PARAMETROS : LIS_PARAMETROS ',' TIPO identificador  { $$ = $1; $$.push(new Parametros( $3, $4, _$.first_line, _$.first_column)); }
       | TIPO identificador { $$ = [new Parametros( $1, $2, _$.first_line, _$.first_column)]; }
       ;
+
+LIS_PARCALL : LIS_PARCALL ',' EX  { $$ = $1; $$.push(new ParametroCall( $3, _$.first_line, _$.first_column)); }
+      | EX { $$ = [new ParametroCall( $1, _$.first_line, _$.first_column)]; }
+      ;
+
+LLAMADA_FUN : 'identificador' '(' LIS_PARCALL ')'	{ $$ = new LlamadaF($1, $3,  _$.first_line, _$.first_column); }
+            | 'identificador' '(' ')' { $$ = new LlamadaF($1, [],  _$.first_line, _$.first_column); }
+            ;
 /**/
 
 EX : '-' EX %prec UMENOS	    { $$ = new Aritmetica($2, null, '-', _$.first_line, _$.first_column); }
@@ -303,5 +316,7 @@ EX : '-' EX %prec UMENOS	    { $$ = new Aritmetica($2, null, '-', _$.first_line,
     | 'cadena'		{ $$ = new Primitive(new Tipo(types.String), String($1), _$.first_line, _$.first_column);}
     | 'char'		{ $$ = new Primitive(new Tipo(types.char), String($1), _$.first_line, _$.first_column);}
     | 'identificador'	{ $$ = new Identificador($1, _$.first_line, _$.first_column); }
+    | LLAMADA_FUN	{ $$ =$1; }
+
     | '(' EX ')'		{ $$ = $2; }
     ;
