@@ -52,6 +52,17 @@ var entrada = "//Llamada a un metodo\n" +
     "//Llamada a una funcion\n" +
     //"double pot = potencia(5,3, \"cadena\", 5*3+1);";
     "int llamada = suma(numero1, 5*8+6)-resta(numero1, 5*8+6) * (multiplicacion(numero1, 5*8+6)/ division(numero1, 5*8+6));";
+var entrada = "import ClaseA;" +
+    "import ClaseB; \nclass ClaseC{\n" +
+    "/*\n" +
+    "Cuerpo de la clase C\n " +
+    "*/ int a;\n" +
+    "sumarllam(1,2);" +
+    "void main() {" +
+    "System.out.println(\"7 elevado al cubo es: \"+3);" +
+    //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
+    "}\n" +
+    "}\n";
 //If(true) { /* Sentencias */ }
 //If(false){ /* Sentencias */ }
 //else { /* Sentencias */ }

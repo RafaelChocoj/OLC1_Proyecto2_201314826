@@ -16,6 +16,8 @@
     const {CaseSwitch} = require('../Instrucciones/CaseSwitch');
     const {DefaultSwitch} = require('../Instrucciones/DefaultSwitch');
 
+    const {Clase} = require('../ClasesF/Clase');
+
     const {VoidMain} = require('../ClasesF/VoidMain');
     const {Metodo} = require('../ClasesF/Metodo');
     const {Parametros} = require('../ClasesF/Parametros');
@@ -128,6 +130,9 @@ char [\'][^\'\n][\']
 "void"                return 'void'
 "main"                return 'main'
 
+"class"               return 'class'
+"import"              return 'import'
+
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
 
@@ -164,6 +169,24 @@ char [\'][^\'\n][\']
 //INICIO: EX EOF {};
 INICIO : LIS_INSTRUCCIONES EOF {$$ = new Tree($1); return $$;};
 
+CLASE : IMPORTS 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase($1, $3, $5, _$.first_line, _$.first_column); }
+      | 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase([], $2, $4, _$.first_line, _$.first_column); }
+      ;
+IMPORTS : IMPORTS 'import' identificador ';' { $$ = $1; $$.push($3); }
+      |  'import' identificador ';' { $$ = [$2]; }
+      ;
+
+LIS_INSTRU_CLASS : LIS_INSTRU_CLASS INSTRU_CLASS { $$ = $1; $$.push($2); }
+                    | INSTRU_CLASS                 { $$ = [$1]; }
+                    //| error { console.log('++Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+                    ;
+INSTRU_CLASS : DECLARACION {$$ = $1;}
+            | ASIGNACION {$$ = $1;}
+            | MAIN {$$ = $1;}
+            | METODO {$$ = $1;}
+            | FUNCION {$$ = $1;}
+            ;
+
 LIS_INSTRUCCIONES : LIS_INSTRUCCIONES INSTRUCCION { $$ = $1; $$.push($2); }
                     | INSTRUCCION                 { $$ = [$1]; }
                     //| error { console.log('++Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
@@ -179,12 +202,15 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | SWITCH {$$ = $1;}
 
             /*probando otros*/
-            | MAIN {$$ = $1;}
+            /*| MAIN {$$ = $1;}
             | METODO {$$ = $1;}
-            | FUNCION {$$ = $1;}
+            | FUNCION {$$ = $1;}*/
 
+            /*otros*/
             | LLAMADA_FUN {$$ = $1;}
-      
+
+            /*principal, clase*/
+            /*| CLASE {$$ = $1;}*/ 
             ;
 
 
