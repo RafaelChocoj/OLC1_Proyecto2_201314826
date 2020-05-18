@@ -4,9 +4,18 @@
 <head>
     <title>Traductor de C# a Python</title>
 </head>
+<style>
+  .demo { overflow:auto; border:1px solid silver; min-height:100px; }
+</style>
+<!--<link rel="stylesheet" href="../../../dist/themes/default/style.min.css" />-->
+<link rel="stylesheet" href="../dist/themes/default/style.min.css"/>
+<link rel="stylesheet" href="../dist/themes/default/style.css"/>
+<!--<link rel="stylesheet" href="../dist/themes/default/32px.png"/>
+<link rel="stylesheet" href="../dist/themes/default/40px.png"/>
+<link rel="stylesheet" href="../dist/themes/default/throbber.gif"/>-->
 
 <body>
-    <h1>Compiladores 1: Proyecto 2</h1>
+    <h1>Compiladores 1: Proyecto 2+</h1>
      <!--para el orignal-->
 
   <body>
@@ -50,7 +59,19 @@
 
 
   <br><br>
-  
+  <!--para la tabla de simbolos inicio-->
+  <body>
+    <div id="contenido_var" class="contenedor">
+      <h3>Tabla de Variables: Rep </h3> 
+      <pre id="contenido-variables"></pre>
+      <!--<div id="div_var">
+        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
+      </div>-->
+
+    </div>
+  </body>
+  <!--fin  la tabla de simbolos inicio-->
+  <br><br>
  
  
   <br><br>
@@ -74,19 +95,7 @@
     <br><br>
 
   <br><br>
-<!--para la tabla de simbolos inicio-->
-  <body>
-    <div id="contenido_var" class="contenedor">
-      <h3>Tabla de Variables: </h3> 
-      <pre id="contenido-variables"></pre>
-      <!--<div id="div_var">
-        <textarea id="txtSalida" name = "txtSalida" cols="80" rows="10"></textarea>
-      </div>-->
 
-    </div>
-  </body>
-  <!--fin  la tabla de simbolos inicio-->
-  <br><br>
 
 
     <!--<input type="file" id="file-input" />-->
@@ -98,7 +107,14 @@
     <button onclick="crear_archivo()" >crear_archivo</button>-->
 
     <br>
-    
+  
+
+   <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="../dist/jstree.min.js"></script>-->
+  <script>
+  //$('#html').jstree();
+  </script>
+
  </body>
 
 
@@ -269,7 +285,16 @@ function rep_err(){
 <!--
 <script type="text/javascript" src="..index_pes.js"></script>
 -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="../dist/jstree.min.js"></script>
+<!--
 <script type="text/javascript" src="../principal/jquery-1.7.2.min.js"></script>
+-->
+
+
+
 
 <script src="../codemirror/lib/codemirror.js"></script>
 <link rel="stylesheet" href="../codemirror//lib//codemirror.css">

@@ -44,6 +44,7 @@ func main() {
 
 	http.Handle("/principal/", http.StripPrefix("/principal/", http.FileServer(http.Dir("principal/"))))
 
+	http.Handle("/dist/", http.StripPrefix("/dist/", http.FileServer(http.Dir("dist/"))))
 	//http.Handle("//", http.StripPrefix("//", http.FileServer(http.Dir("/"))))
 	//http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("//"))))
 	//http.Handle("/", "index_pes.js")
@@ -53,6 +54,6 @@ func main() {
 
 	//http.HandleFunc("/otrapagina",index)
 
-	fmt.Printf("Servidor escuchando en: http://localhost:8000/")
-	http.ListenAndServe(":8000", nil)
+	fmt.Printf("Servidor escuchando en: http://localhost:3000/")
+	http.ListenAndServe(":3000", nil)
 }
