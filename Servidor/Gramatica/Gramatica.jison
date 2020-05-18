@@ -5,6 +5,7 @@
     /*const {Continue} = require('../Expresiones/Continue');
     const {Break} = require('../Expresiones/Break');*/
     const {Logica} = require('../Expresiones/Logica');
+    const {LogicaNot} = require('../Expresiones/LogicaNot');
     
     const {Identificador} = require('../Expresiones/Identificador');
     const {Imprimir} = require('../Instrucciones/Imprimir');
@@ -173,8 +174,12 @@ char [\'][^\'\n][\']
 %start INICIO
 %% 
 
-//INICIO: EX EOF {};
-INICIO : LIS_INSTRUCCIONES EOF {$$ = new Tree($1); return $$;};
+////INICIO: EX EOF {};
+
+//INICIO : LIS_INSTRUCCIONES EOF {$$ = new Tree($1); return $$;};
+INICIO : IN_CLASE EOF {$$ = new Tree($1); return $$;};
+IN_CLASE : CLASE { $$ = [$1]; }
+      ;
 
 CLASE : IMPORTS 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase($1, $3, $5, _$.first_line, _$.first_column); }
       | 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase([], $2, $4, _$.first_line, _$.first_column); }
@@ -214,7 +219,7 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             | FUNCION {$$ = $1;}*/
 
             /*otros*/
-            | LLAMADA_FUN {$$ = $1;}
+            | LLAMADA_FUN_ALONE {$$ = $1;}
 
             /*solo para bucles*/
             | 'continue' ';' {$$ = new Continue(@1.first_line, @1.first_column)}
@@ -222,8 +227,6 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             /*solo para main y metodos*/
             | 'return' ';' {$$ = new ReturnM(@1.first_line, @1.first_column);}
             | 'return' EX ';'  {$$ = new ReturnF($2, @1.first_line, @1.first_column);}
-
-            | CLASE {$$ = $1;}
             ;
 
 
@@ -323,10 +326,14 @@ LIS_PARCALL : LIS_PARCALL ',' EX  { $$ = $1; $$.push(new ParametroCall( $3, _$.f
 LLAMADA_FUN : 'identificador' '(' LIS_PARCALL ')'	{ $$ = new LlamadaF($1, $3,  _$.first_line, _$.first_column); }
             | 'identificador' '(' ')' { $$ = new LlamadaF($1, [],  _$.first_line, _$.first_column); }
             ;
+
+LLAMADA_FUN_ALONE : 'identificador' '(' LIS_PARCALL ')' ';'	{ $$ = new LlamadaF($1, $3,  _$.first_line, _$.first_column); }
+                  | 'identificador' '(' ')'  ';' { $$ = new LlamadaF($1, [],  _$.first_line, _$.first_column); }
+                  ;
 /**/
 
 EX : '-' EX %prec UMENOS	    { $$ = new Aritmetica($2, null, '-', _$.first_line, _$.first_column); }
-    | '!' EX	 { }
+    | '!' EX	 { $$ = new LogicaNot($2, '!', _$.first_line, _$.first_column); }
     
     | EX '++'		  { $$ = new Aritmetica($1, null, '++', _$.first_line, _$.first_column); }
     | EX '--'		  { $$ = new Aritmetica($1, null, '--', _$.first_line, _$.first_column); }

@@ -86,18 +86,17 @@ var entrada = "do {\n"+
   "bb = 1+2;"+
   "}";
 
-  var entrada = "import ClaseA;"+
-"import ClaseB; \nclass ClaseC{\n"+
+  var entrada = "/*import ClaseA;"+
+"import ClaseB;*/ \nclass ClaseC{\n"+
 "/*\n"+
 "Cuerpo de la clase C\n "+
-"*/ int a;\n"+
-
+"*/\n"+
 
 "int suma() { "+
 "If( 3 < 4) { while(1>a || a ==b){ /*return;*/} }"+
   "System.out.println(\"7 elevado al cubo es: \"+3);"+
   //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
-  "}\n" +
+  "return !(true || 1>a) ; }\n" +
 "}\n";
 
 //If(true) { /* Sentencias */ }
