@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const gramatica = require("./Gramatica/gramatica");
+const analizador = require('./Gramatica/gramatica.js');
 //var entrada = "-12345@+2*6.25+\n#14 -( nose + \"saber\")+'o7'";
 //var entrada = "2^2+5%3*12345@+2*6.25+\n#14 -( nose + \"saber\")+'o'";
 //var entrada = "a = 5+2*7-(5/3); b = var1;";
@@ -59,8 +59,8 @@ var entrada = "/*import ClaseA;" +
     "/*\n" +
     "Cuerpo de la clase C\n " +
     "*/\n" +
-    "int suma() { " +
-    "If( 3 < 4) { while(1>a || a ==b){ /*return;*/} }" +
+    "@ void suma() { " +
+    "If( 3 < 4) # { while(1>a || a ==b){ /*return 25*2;*/} }" +
     "System.out.println(\"7 elevado al cubo es: \"+3);" +
     //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
     "return !(true || 1>a) ; }\n" +
@@ -77,7 +77,8 @@ console.log("res: " + resultado);
 function parser(texto) {
     console.log("cad en: " + texto);
     try {
-        const tree = gramatica.parse(entrada);
+        //const tree = gramatica.parse(entrada);
+        const tree = analizador.parse(entrada);
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
         //console.log(tree);
@@ -113,7 +114,13 @@ function parser(texto) {
         }
         console.log("-------------------");
         ///errores
-        //console.log(gramatica.LisErrores.length);
+        //
+        //console.log(gramatica);
+        const lex_err = analizador.get_lista_erroes();
+        console.log(lex_err);
+        console.log("tam, desde fin " + lex_err.length);
+        //console.log(analizador.parseError;
+        console.log(tree.lis_err);
         //////
         return null;
     }

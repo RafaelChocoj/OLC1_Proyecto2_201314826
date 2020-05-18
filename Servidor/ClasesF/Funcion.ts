@@ -2,6 +2,7 @@ import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
 import {types, Tipo } from "../Abstracto/Tipo";
 
+
 export class Funcion extends Node {
     type:Tipo;
     identificador: String;

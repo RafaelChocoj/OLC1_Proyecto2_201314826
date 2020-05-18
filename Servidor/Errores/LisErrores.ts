@@ -7,7 +7,7 @@ class LisErrores extends Array<NodeErr>{
     }
 
     public static add(new_error:NodeErr){
-        //console.log(new_error);
+        console.log(new_error);
         this.prototype.push(new_error);
     }
 

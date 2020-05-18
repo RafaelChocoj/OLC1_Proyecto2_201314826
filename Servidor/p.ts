@@ -1,5 +1,7 @@
 
 import * as gramatica from "./Gramatica/gramatica";
+
+const analizador = require('./Gramatica/gramatica.js');
 //const par = require('./Grammar/gramatica');
 import { Break } from './ClasesF/Break';
 import { Continue } from './ClasesF/Continue';
@@ -92,8 +94,8 @@ var entrada = "do {\n"+
 "Cuerpo de la clase C\n "+
 "*/\n"+
 
-"int suma() { "+
-"If( 3 < 4) { while(1>a || a ==b){ /*return;*/} }"+
+"@ void suma() { "+
+"If( 3 < 4) # { while(1>a || a ==b){ /*return 25*2;*/} }"+
   "System.out.println(\"7 elevado al cubo es: \"+3);"+
   //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
   "return !(true || 1>a) ; }\n" +
@@ -113,7 +115,9 @@ console.log("res: " + resultado);
 function parser(texto:string) {
     console.log("cad en: " + texto)
     try {
-        const tree = gramatica.parse(entrada);
+        //const tree = gramatica.parse(entrada);
+        const tree = analizador.parse(entrada);
+        
 
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
@@ -151,14 +155,22 @@ function parser(texto:string) {
         console.log("-------------------");
         //console.log(tree.arbol_ast);
 
-        for (let i:Number = 0; i < tree.arbol_ast.length; i++)
+        for (let i = 0; i < tree.arbol_ast.length; i++)
         {
             console.log(tree.arbol_ast[i]);
         }
         console.log("-------------------");
         ///errores
 
-        //console.log(gramatica.LisErrores.length);
+        //
+        //console.log(gramatica);
+        const lex_err =  analizador.get_lista_erroes();
+        console.log( lex_err);
+        console.log("tam, desde fin " + lex_err.length);
+        //console.log(analizador.parseError;
+
+        console.log(tree.lis_err);
+        
 
         //////
         return null;

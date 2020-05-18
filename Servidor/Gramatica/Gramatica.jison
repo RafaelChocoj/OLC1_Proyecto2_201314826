@@ -37,9 +37,19 @@
     const {Tipo, types} = require('../Abstracto/Tipo');
     const {Tree} = require('../Simbols/Tree');
 
-    let lis_Errores=require('../Errores/LisErrores');
-    let NError=require('../Errores/NodeErr');
-    //const {NodeErr} = require('../Errores/NodeErr');
+    const lis_Errores=require('../Errores/LisErrores');
+    const NError=require('../Errores/NodeErr');
+     
+      const {NodeErr}=require('../Errores/NodeErr');
+      this.lis_err = new Array()
+      
+
+    exports.get_lista_erroes = function () { 
+          //console.log("tam dentro de gram: " + lis_err.length);
+          return lis_err;
+     };
+
+
 %}
 
 /*inicio Lexico*/
@@ -144,7 +154,8 @@ char [\'][^\'\n][\']
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
 
-.           lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
+.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)) //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
+            
 
 /lex
 

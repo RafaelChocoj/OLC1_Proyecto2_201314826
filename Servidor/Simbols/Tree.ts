@@ -20,7 +20,7 @@ export class Tree {
         this.lis_err = new Array<NodeErr>();
         this.arbol_ast = new Array<String>();
 
-        this.arbol_ast.push("<h1>Reporte AST</h1>");
+        //this.arbol_ast.push("<h1>Reporte AST</h1>");
         this.arbol_ast.push("<div id=\"html\" class=\"demo\">");
         this.arbol_ast.push("<ul>");
         this.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Raiz");

@@ -1,10 +1,11 @@
 import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
+import { NodeErr } from "../Errores/NodeErr";
 
 export class ReturnF extends Node {
 
     expresion: Node;
-    constructor(expresion: Node, line: Number, column: Number) {
+    constructor(expresion: Node, line: Number, column:Number) {
         super(null, line, column);
         this.expresion = expresion;
     }
@@ -13,7 +14,8 @@ export class ReturnF extends Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Return FUN");
         tree.arbol_ast.push("<ul>");
             if(T_return != "RF"){
-                console.log("Error, No se Esperaba una Expresion en el retorno" + this.line + "-" + this.column);
+                tree.lis_err.push(new NodeErr("Sintactico","No se Esperaba una Expresion en el retorno", "return", this.line, this.column) );
+                //console.log("Error, No se Esperaba una Expresion en el retorno" + this.line + "-" + this.column);
             }
             const result = this.expresion.execute(tree);
         tree.arbol_ast.push("</ul>");

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const gramatica = require("./Gramatica/gramatica");
+const analizador = require('./Gramatica/gramatica.js');
 var app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -36,7 +36,8 @@ function parser(entrada) {
     let resul_fin;
     resul_fin = new Array();
     try {
-        const tree = gramatica.parse(entrada);
+        //const tree = gramatica.parse(entrada);
+        const tree = analizador.parse(entrada);
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
         //console.log(tree);
@@ -75,13 +76,67 @@ function parser(entrada) {
         console.log("-------------------");
         ///errores
         //console.log(gramatica.LisErrores.length);
+        const lex_err = analizador.get_lista_erroes();
+        let html_err = ErrLex(lex_err);
+        //console.log(lex_err);
         //////
         //return null;
+        /*if (lex_err.length > 0){
+          resul_fin.push("SE");
+        }*/
         resul_fin.push(ast_carpetas);
+        resul_fin.push(html_err);
         return resul_fin;
     }
     catch (e) {
         //return "Error en compilacion de Entrada: "+ e.toString();
         return ["Error en compilacion de Entrada: " + e.toString()];
     }
+}
+function ErrLex(lex_err) {
+    console.log(lex_err);
+    let Contenido_html;
+    Contenido_html = "<html>" +
+        "<body>" +
+        "<h1 align='center'>ERRORES ENCONTRADOS</h1></br>" +
+        "<table cellpadding='10' border = '1' align='center'>" +
+        "<tr>" +
+        "<td><strong>No." +
+        "</strong></td>" +
+        "<td><strong>Error" +
+        "</strong></td>" +
+        "<td><strong>Descripción" +
+        "</strong></td>" +
+        "<td><strong>Linea" +
+        "</strong></td>" +
+        "<td><strong>Columna" +
+        "</strong></td>" +
+        "<td><strong>Tipo" +
+        "</strong></td>" +
+        "</tr>";
+    let Cad_tokens = "";
+    let tempo_tokens;
+    for (let i = 0; i < lex_err.length; i++) {
+        tempo_tokens = "";
+        tempo_tokens = "<tr>" +
+            "<td><strong>" + (i + 1) +
+            "</strong></td>" +
+            "<td>" + lex_err[i].idlex +
+            "</td>" +
+            "<td>" + lex_err[i].descripcion +
+            "</td>" +
+            "<td>" + lex_err[i].linea +
+            "</td>" +
+            "<td>" + lex_err[i].columna +
+            "</td>" +
+            "<td>" + lex_err[i].tipo +
+            "</td>" +
+            "</tr>";
+        Cad_tokens = Cad_tokens + tempo_tokens;
+    }
+    Contenido_html = Contenido_html + Cad_tokens +
+        "</table>" +
+        "</body>" +
+        "</html>";
+    return Contenido_html;
 }

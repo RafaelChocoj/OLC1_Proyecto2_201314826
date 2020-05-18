@@ -20,6 +20,12 @@ function Send(){
 
             $('#html').jstree();
 
+            /*para generar reporte de errores*/
+            var html_erros = data[1];
+            //console.log(html_erros);
+            var elemento = document.getElementById('contenido-html');
+            elemento.innerHTML = html_erros;
+
 
 
 
