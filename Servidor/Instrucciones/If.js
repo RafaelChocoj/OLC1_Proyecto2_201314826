@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../Abstracto/Node");
-//import { Continue } from "../Expresiones/Continue";
-//import { Break } from "../Expresiones/Break";
+const Break_1 = require("../ClasesF/Break");
+const Continue_1 = require("../ClasesF/Continue");
 class If extends Node_1.Node {
     constructor(condicion, IfList, ElseList, line, column) {
         super(null, line, column);
@@ -10,7 +10,7 @@ class If extends Node_1.Node {
         this.IfList = IfList;
         this.ElseList = ElseList;
     }
-    execute(tree) {
+    execute(tree, in_bucle, T_return, in_switch) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>If");
         tree.arbol_ast.push("<ul>");
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Condicion");
@@ -21,20 +21,38 @@ class If extends Node_1.Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista IF Instrucciones");
         tree.arbol_ast.push("<ul>");
         for (let i = 0; i < this.IfList.length; i++) {
-            const res = this.IfList[i].execute(tree);
-            /*if(res instanceof Continue || res instanceof Break){
-                return res;
-            }*/
+            const res = this.IfList[i].execute(tree, in_bucle, T_return, in_switch);
+            //console.log("res " + res);
+            //console.log("is bre " + (this.IfList[i] instanceof Break));
+            if (in_bucle == false) {
+                if (res instanceof Continue_1.Continue) {
+                    console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
+                }
+            }
+            console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
+            if (in_switch == false && in_bucle == false) {
+                if (res instanceof Break_1.Break) {
+                    console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
+                }
+            }
         }
         tree.arbol_ast.push("</ul>");
         if (this.ElseList.length > 0) {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista ELSE Instrucciones");
             tree.arbol_ast.push("<ul>");
             for (let i = 0; i < this.ElseList.length; i++) {
-                const res = this.ElseList[i].execute(tree);
-                /*if(res instanceof Continue || res instanceof Break){
-                    return res;
-                }*/
+                const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch);
+                if (in_bucle == false) {
+                    if (res instanceof Continue_1.Continue) {
+                        console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
+                    }
+                }
+                //console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
+                if (in_switch == false && in_bucle == false) {
+                    if (res instanceof Break_1.Break) {
+                        console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
+                    }
+                }
             }
             tree.arbol_ast.push("</ul>");
         }

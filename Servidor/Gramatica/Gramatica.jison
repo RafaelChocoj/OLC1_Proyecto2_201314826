@@ -17,6 +17,11 @@
     const {DefaultSwitch} = require('../Instrucciones/DefaultSwitch');
 
     const {Clase} = require('../ClasesF/Clase');
+    const {Continue} = require('../ClasesF/Continue');
+    const {Break} = require('../ClasesF/Break');
+
+    const {ReturnM} = require('../ClasesF/ReturnM');
+    const {ReturnF} = require('../ClasesF/ReturnF');
 
     const {VoidMain} = require('../ClasesF/VoidMain');
     const {Metodo} = require('../ClasesF/Metodo');
@@ -33,6 +38,7 @@
 
     let lis_Errores=require('../Errores/LisErrores');
     let NError=require('../Errores/NodeErr');
+    //const {NodeErr} = require('../Errores/NodeErr');
 %}
 
 /*inicio Lexico*/
@@ -129,6 +135,7 @@ char [\'][^\'\n][\']
 
 "void"                return 'void'
 "main"                return 'main'
+"return"              return 'return'
 
 "class"               return 'class'
 "import"              return 'import'
@@ -195,11 +202,11 @@ LIS_INSTRUCCIONES : LIS_INSTRUCCIONES INSTRUCCION { $$ = $1; $$.push($2); }
 INSTRUCCION : DECLARACION {$$ = $1;}
             | ASIGNACION {$$ = $1;}
             | PRINT {$$ = $1;}
-            | WHILE {$$ = $1;}
-            | DOWHILE {$$ = $1;}
-            | FOR {$$ = $1;}
+            | WHILE {$$ = $1;} //breack, continue
+            | DOWHILE {$$ = $1;} //breack, continue
+            | FOR {$$ = $1;} //breack, continue
             | IF {$$ = $1;}
-            | SWITCH {$$ = $1;}
+            | SWITCH {$$ = $1;} //breack
 
             /*probando otros*/
             /*| MAIN {$$ = $1;}
@@ -209,8 +216,14 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             /*otros*/
             | LLAMADA_FUN {$$ = $1;}
 
-            /*principal, clase*/
-            /*| CLASE {$$ = $1;}*/ 
+            /*solo para bucles*/
+            | 'continue' ';' {$$ = new Continue(@1.first_line, @1.first_column)}
+            | 'break' ';' {$$ = new Break( @1.first_line, @1.first_column)}
+            /*solo para main y metodos*/
+            | 'return' ';' {$$ = new ReturnM(@1.first_line, @1.first_column);}
+            | 'return' EX ';'  {$$ = new ReturnF($2, @1.first_line, @1.first_column);}
+
+            | CLASE {$$ = $1;}
             ;
 
 

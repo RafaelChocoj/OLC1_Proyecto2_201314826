@@ -1,4 +1,5 @@
 import {Node} from "../Abstracto/Node";
+import { NodeErr } from "../Errores/NodeErr";
 
 
 /**
@@ -7,14 +8,16 @@ import {Node} from "../Abstracto/Node";
 export class Tree {
     instructions: Array<Node>
     //excepciones: Array<Exception>
-    console: Array<String>
+    //console: Array<String>
+    lis_err: Array<NodeErr>
 
     arbol_ast: Array<String>
 
     constructor(instructions: Array<Node>) {
         this.instructions = instructions;
         //this.excepciones = new Array<Exception>();
-        this.console = new Array<String>();
+        //this.console = new Array<String>();
+        this.lis_err = new Array<NodeErr>();
         this.arbol_ast = new Array<String>();
     }
 }

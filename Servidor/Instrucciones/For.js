@@ -11,7 +11,7 @@ class For extends Node_1.Node {
         this.incredecre = incredecre;
         this.List = List;
     }
-    execute(tree) {
+    execute(tree, in_bucle, T_return, in_switch) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>For");
         tree.arbol_ast.push("<ul>");
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Inicial");
@@ -32,7 +32,7 @@ class For extends Node_1.Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
         tree.arbol_ast.push("<ul>");
         for (let i = 0; i < this.List.length; i++) {
-            const res = this.List[i].execute(tree);
+            const res = this.List[i].execute(tree, true, T_return, in_switch);
             /*if (res instanceof Continue) {
                 break;
             } else if (res instanceof Break) {

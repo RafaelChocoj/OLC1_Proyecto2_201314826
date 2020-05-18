@@ -8,19 +8,19 @@ class Switch extends Node_1.Node {
         this.CasesList = CasesList;
         this.defaulList = defaulList;
     }
-    execute(tree) {
+    execute(tree, in_bucle, T_return, in_switch) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Switch");
         tree.arbol_ast.push("<ul>");
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Expresion");
         tree.arbol_ast.push("<ul>");
         let exp;
-        exp = this.expresion.execute(tree);
+        exp = this.expresion.execute(tree, in_bucle, T_return, in_switch);
         tree.arbol_ast.push("</ul>");
         //if (this.CasesList.length > 0 ){
         //tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>CASE");
         //tree.arbol_ast.push("<ul>");
         for (let i = 0; i < this.CasesList.length; i++) {
-            const res = this.CasesList[i].execute(tree);
+            const res = this.CasesList[i].execute(tree, in_bucle, T_return, true);
             /*if(res instanceof Continue || res instanceof Break){
                return res;
            }*/
@@ -31,7 +31,7 @@ class Switch extends Node_1.Node {
         //    tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
         //    tree.arbol_ast.push("<ul>");
         for (let i = 0; i < this.defaulList.length; i++) {
-            const res = this.defaulList[i].execute(tree);
+            const res = this.defaulList[i].execute(tree, in_bucle, T_return, true);
             /*if(res instanceof Continue || res instanceof Break){
                return res;
            }*/

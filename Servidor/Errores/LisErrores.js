@@ -5,7 +5,7 @@ class LisErrores extends Array {
         super();
     }
     static add(new_error) {
-        console.log(new_error);
+        //console.log(new_error);
         this.prototype.push(new_error);
     }
 }

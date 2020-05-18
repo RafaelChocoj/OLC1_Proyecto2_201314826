@@ -38,7 +38,7 @@ export class Funcion extends Node {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
             tree.arbol_ast.push("<ul>");
             for (let i = 0; i < this.ListInstruc.length; i++) {
-                const res = this.ListInstruc[i].execute(tree);
+                const res = this.ListInstruc[i].execute(tree, false, "RF", false);
                 /*if(res instanceof Continue || res instanceof Break){
                     return res;
                 }*/

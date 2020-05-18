@@ -1,6 +1,10 @@
 
 import * as gramatica from "./Gramatica/gramatica";
 //const par = require('./Grammar/gramatica');
+import { Break } from './ClasesF/Break';
+import { Continue } from './ClasesF/Continue';
+
+import { LisErrores } from "./Errores/LisErrores";
 
 
 //var entrada = "-12345@+2*6.25+\n#14 -( nose + \"saber\")+'o7'";
@@ -33,22 +37,7 @@ var entrada = "If( 3 < 4) { /* Sentencias */ char a = 'd'; }"+
 "else if (2 < 5) {System.out.print(\"en el elsiif\");}"+
 "else { b = 2;}";
 
-var entrada = "switch (3*54) {\n"+
-  "case 3: // Sentencias\n"+
-  "If( 3 < 4) { }"+
-  //" int a,b;"+
-  //"break;"+
- // " case 5: "+
-  //"// Sentencias\n"+
 
-  //  "// Sentencias\n"+
-  //"break;"+
-  " default: "+
-  //  "// Sentencias\n"+
-  //"break;"+
-  //" case 7: "+
-  "bb = 1+2;"+
-  "}";
 
 
   var entrada = "void main() {"+
@@ -72,18 +61,43 @@ var entrada = "switch (3*54) {\n"+
 "int llamada = suma(numero1, 5*8+6)-resta(numero1, 5*8+6) * (multiplicacion(numero1, 5*8+6)/ division(numero1, 5*8+6));";
 
 
-var entrada = "import ClaseA;"+
+
+
+var entrada = "do {\n"+
+  "continue; If( 3 < 4) { break; }"+
+  "} while(1>a || a ==b);\n";
+
+
+  var entrada = "switch (3*54) {\n"+
+  "case 3: // Sentencias\n"+
+  "If( 3 < 4) { }"+
+  //" int a,b;"+
+  "break;"+
+ // " case 5: "+
+  //"// Sentencias\n"+
+
+  //  "// Sentencias\n"+
+ 
+  " default: "+
+  //  "// Sentencias\n"+
+   "break;"+
+  "break;"+
+  //" case 7: "+
+  "bb = 1+2;"+
+  "}";
+
+  var entrada = "import ClaseA;"+
 "import ClaseB; \nclass ClaseC{\n"+
 "/*\n"+
 "Cuerpo de la clase C\n "+
 "*/ int a;\n"+
 
-"sumarllam(1,2);"+
-"void main() {"+
+
+"int suma() { "+
+"If( 3 < 4) { while(1>a || a ==b){ /*return;*/} }"+
   "System.out.println(\"7 elevado al cubo es: \"+3);"+
   //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
   "}\n" +
-
 "}\n";
 
 //If(true) { /* Sentencias */ }
@@ -101,6 +115,7 @@ function parser(texto:string) {
     console.log("cad en: " + texto)
     try {
         const tree = gramatica.parse(entrada);
+
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
         
@@ -110,8 +125,15 @@ function parser(texto:string) {
         //tree.instructions.map((m: any) => {
         tree.instructions.map((m: any) => {
 
-        const res = m.execute(tree);
+        const res = m.execute(tree, false, "NA", false);
 
+        //console.log((res instanceof)+ " fin");
+        /*if (res instanceof Break) {
+          console.log('Semantico',
+            `Sentencia break fuera de un ciclo`,
+            res.line, res.column);
+        }
+        */
             /*if (res instanceof Break) {
               const error = new Exception('Semantico',
                 `Sentencia break fuera de un ciclo`,
@@ -135,6 +157,9 @@ function parser(texto:string) {
             console.log(tree.arbol_ast[i]);
         }
         console.log("-------------------");
+        ///errores
+
+        //console.log(gramatica.LisErrores.length);
 
         //////
         return null;

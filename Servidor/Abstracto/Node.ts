@@ -12,7 +12,7 @@ export abstract class Node {
      * @abstract Metodo que sirver para ejecutar una instruccion o expresion
      * si fuera instruccion devuelve nulo y si fuera expresion devuelve un valor
      */
-    abstract execute(/*table: Table,*/ tree: Tree): any;
+    abstract execute(/*table: Table,*/ tree: Tree, in_bucle?:Boolean, T_return?:String, in_switch?:Boolean): any;
 
     constructor(type: Tipo, line: Number, column: Number) {
         this.type = type;

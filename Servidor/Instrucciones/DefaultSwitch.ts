@@ -1,6 +1,7 @@
 import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
 import { types } from "../Abstracto/Tipo";
+import { Continue } from '../ClasesF/Continue';
 
 
 export class DefaultSwitch extends Node {
@@ -13,7 +14,7 @@ export class DefaultSwitch extends Node {
     }
 
 
-    execute(tree: Tree) {
+    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean) {
 
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
         tree.arbol_ast.push("<ul>");
@@ -23,10 +24,13 @@ export class DefaultSwitch extends Node {
                 tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
                 tree.arbol_ast.push("<ul>");
                 for (let i = 0; i < this.ListInstruc.length; i++) {
-                    const res = this.ListInstruc[i].execute(tree);
-                    /*if(res instanceof Continue || res instanceof Break){
-                        return res;
-                    }*/
+                    const res = this.ListInstruc[i].execute(tree, in_bucle, T_return, true);
+
+                    if (in_bucle == false){
+                        if(res instanceof Continue){
+                            console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
+                        }
+                    }
                 }
                 tree.arbol_ast.push("</ul>");
             }

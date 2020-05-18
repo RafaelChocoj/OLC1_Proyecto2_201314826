@@ -7,7 +7,8 @@ class Tree {
     constructor(instructions) {
         this.instructions = instructions;
         //this.excepciones = new Array<Exception>();
-        this.console = new Array();
+        //this.console = new Array<String>();
+        this.lis_err = new Array();
         this.arbol_ast = new Array();
     }
 }

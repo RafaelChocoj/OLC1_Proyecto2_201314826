@@ -15,7 +15,7 @@ export class While extends Node {
         this.List = List;
     }
 
-    execute(tree: Tree) {
+    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>While");
         tree.arbol_ast.push("<ul>");
 
@@ -28,7 +28,7 @@ export class While extends Node {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
             tree.arbol_ast.push("<ul>");
             for (let i = 0; i < this.List.length; i++) {
-                const res = this.List[i].execute(tree);
+                const res = this.List[i].execute(tree, true, T_return, in_switch);
                 /*if (res instanceof Continue) {
                     break;
                 } else if (res instanceof Break) {

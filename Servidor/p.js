@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const gramatica = require("./Gramatica/gramatica");
-//const par = require('./Grammar/gramatica');
 //var entrada = "-12345@+2*6.25+\n#14 -( nose + \"saber\")+'o7'";
 //var entrada = "2^2+5%3*12345@+2*6.25+\n#14 -( nose + \"saber\")+'o'";
 //var entrada = "a = 5+2*7-(5/3); b = var1;";
@@ -22,21 +21,6 @@ var entrada = "int k;" +
 var entrada = "If( 3 < 4) { /* Sentencias */ char a = 'd'; }" +
     "else if (2 < 5) {System.out.print(\"en el elsiif\");}" +
     "else { b = 2;}";
-var entrada = "switch (3*54) {\n" +
-    "case 3: // Sentencias\n" +
-    "If( 3 < 4) { }" +
-    //" int a,b;"+
-    //"break;"+
-    // " case 5: "+
-    //"// Sentencias\n"+
-    //  "// Sentencias\n"+
-    //"break;"+
-    " default: " +
-    //  "// Sentencias\n"+
-    //"break;"+
-    //" case 7: "+
-    "bb = 1+2;" +
-    "}";
 var entrada = "void main() {" +
     "System.out.println(\"7 elevado al cubo es: \"+3);" +
     "}\n" +
@@ -52,13 +36,31 @@ var entrada = "//Llamada a un metodo\n" +
     "//Llamada a una funcion\n" +
     //"double pot = potencia(5,3, \"cadena\", 5*3+1);";
     "int llamada = suma(numero1, 5*8+6)-resta(numero1, 5*8+6) * (multiplicacion(numero1, 5*8+6)/ division(numero1, 5*8+6));";
+var entrada = "do {\n" +
+    "continue; If( 3 < 4) { break; }" +
+    "} while(1>a || a ==b);\n";
+var entrada = "switch (3*54) {\n" +
+    "case 3: // Sentencias\n" +
+    "If( 3 < 4) { }" +
+    //" int a,b;"+
+    "break;" +
+    // " case 5: "+
+    //"// Sentencias\n"+
+    //  "// Sentencias\n"+
+    " default: " +
+    //  "// Sentencias\n"+
+    "break;" +
+    "break;" +
+    //" case 7: "+
+    "bb = 1+2;" +
+    "}";
 var entrada = "import ClaseA;" +
     "import ClaseB; \nclass ClaseC{\n" +
     "/*\n" +
     "Cuerpo de la clase C\n " +
     "*/ int a;\n" +
-    "sumarllam(1,2);" +
-    "void main() {" +
+    "int suma() { " +
+    "If( 3 < 4) { while(1>a || a ==b){ /*return;*/} }" +
     "System.out.println(\"7 elevado al cubo es: \"+3);" +
     //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
     "}\n" +
@@ -82,7 +84,14 @@ function parser(texto) {
         console.log(tree.instructions);
         //tree.instructions.map((m: any) => {
         tree.instructions.map((m) => {
-            const res = m.execute(tree);
+            const res = m.execute(tree, false, "NA", false);
+            //console.log((res instanceof)+ " fin");
+            /*if (res instanceof Break) {
+              console.log('Semantico',
+                `Sentencia break fuera de un ciclo`,
+                res.line, res.column);
+            }
+            */
             /*if (res instanceof Break) {
               const error = new Exception('Semantico',
                 `Sentencia break fuera de un ciclo`,
@@ -103,6 +112,8 @@ function parser(texto) {
             console.log(tree.arbol_ast[i]);
         }
         console.log("-------------------");
+        ///errores
+        //console.log(gramatica.LisErrores.length);
         //////
         return null;
     }
