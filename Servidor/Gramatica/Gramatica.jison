@@ -70,6 +70,7 @@
 /*inicio Lexico*/
 %lex
 %options case-insensitive
+
 /*expresiones regulares*/
 entero [0-9]+
 //decimal {entero}("."{entero})?
