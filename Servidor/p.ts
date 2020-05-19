@@ -164,6 +164,7 @@ function parser(texto:string) {
 
         //
         //console.log(gramatica);
+        //analizador.clear_lista_erroes();
         const lex_err =  analizador.get_lista_erroes();
         console.log( lex_err);
         console.log("tam, desde fin " + lex_err.length);

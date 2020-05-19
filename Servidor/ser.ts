@@ -51,8 +51,10 @@ function parser(entrada:string) {
     resul_fin = new Array<String>()
     try {
 
-        //const tree = gramatica.parse(entrada);
-        const tree = analizador.parse(entrada);
+        const tree = gramatica.parse(entrada);    
+        //const tree = analizador.parse(entrada);
+
+        //analizador.clear_lista_erroes();
 
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
@@ -101,10 +103,34 @@ function parser(entrada:string) {
         ///errores
 
         //console.log(gramatica.LisErrores.length);
+
+        //analizador.clear_lista_erroes();
+        let lex_err =  gramatica.get_lista_erroes();
+        //let lex_err =  analizador.get_lista_erroes();
         
-        const lex_err =  analizador.get_lista_erroes();
+        for (let i = 0; i < tree.lis_err.length; i++)
+        {
+          lex_err.push(tree.lis_err[i]);
+        }
+        /*for (let i = 0; i < lex_err.length; i++)
+        {
+          tree.lis_err.push(lex_err[i]);
+        }*/
+
         let html_err = ErrLex(lex_err);
+        //let html_err = ErrLex(tree.lis_err);
+
+        console.log("********");
+        console.log(lex_err);
+
+        while(lex_err.length>0){
+          lex_err.pop();
+        }
+        //lex_err=[];
+        //console.log("********");
         //console.log(lex_err);
+
+        
 
         //////
         //return null;
@@ -114,6 +140,7 @@ function parser(entrada:string) {
         
         resul_fin.push(ast_carpetas);
         resul_fin.push(html_err);
+        
 
         return resul_fin;
     } catch (e) {
@@ -124,9 +151,9 @@ function parser(entrada:string) {
 
 
 function ErrLex(lex_err:Array<NodeErr>) {
-  console.log(lex_err);
-
+  //console.log(lex_err);
   let Contenido_html:String;
+  Contenido_html = "";
             Contenido_html = "<html>" +
             "<body>" +
             "<h1 align='center'>ERRORES ENCONTRADOS</h1></br>" +

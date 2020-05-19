@@ -1,6 +1,6 @@
 import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
-//import { Exception } from "../utils/Exception";
+import { NodeErr } from "../Errores/NodeErr";
 import { types } from "../Abstracto/Tipo";
 
 import { Break } from '../ClasesF/Break';
@@ -39,12 +39,14 @@ export class If extends Node {
 
                 if (in_bucle == false){
                     if(res instanceof Continue){
+                        tree.lis_err.push(new NodeErr("Sintactico","Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column) );
                         console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }
                 console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
                 if (in_switch == false && in_bucle == false){
                     if(res instanceof Break){
+                        tree.lis_err.push(new NodeErr("Sintactico","Sentencia break fuera de un ciclo ", "Break", res.line, res.column) );
                         console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }
@@ -60,12 +62,14 @@ export class If extends Node {
                     
                     if (in_bucle == false){
                         if(res instanceof Continue){
+                            tree.lis_err.push(new NodeErr("Sintactico","Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column) );
                             console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                         }
                     }
                     //console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
                     if (in_switch == false && in_bucle == false){
                         if(res instanceof Break){
+                            tree.lis_err.push(new NodeErr("Sintactico","Sentencia break fuera de un ciclo ", "Break", res.line, res.column) );
                             console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
                         }
                     }

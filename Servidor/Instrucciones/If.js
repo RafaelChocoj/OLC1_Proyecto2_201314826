@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../Abstracto/Node");
+const NodeErr_1 = require("../Errores/NodeErr");
 const Break_1 = require("../ClasesF/Break");
 const Continue_1 = require("../ClasesF/Continue");
 class If extends Node_1.Node {
@@ -26,12 +27,14 @@ class If extends Node_1.Node {
             //console.log("is bre " + (this.IfList[i] instanceof Break));
             if (in_bucle == false) {
                 if (res instanceof Continue_1.Continue) {
+                    tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column));
                     console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                 }
             }
             console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
             if (in_switch == false && in_bucle == false) {
                 if (res instanceof Break_1.Break) {
+                    tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia break fuera de un ciclo ", "Break", res.line, res.column));
                     console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
                 }
             }
@@ -44,12 +47,14 @@ class If extends Node_1.Node {
                 const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch);
                 if (in_bucle == false) {
                     if (res instanceof Continue_1.Continue) {
+                        tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column));
                         console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }
                 //console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
                 if (in_switch == false && in_bucle == false) {
                     if (res instanceof Break_1.Break) {
+                        tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia break fuera de un ciclo ", "Break", res.line, res.column));
                         console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }

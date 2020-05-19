@@ -15,7 +15,7 @@ export class ReturnF extends Node {
         tree.arbol_ast.push("<ul>");
             if(T_return != "RF"){
                 tree.lis_err.push(new NodeErr("Sintactico","No se Esperaba una Expresion en el retorno", "return", this.line, this.column) );
-                //console.log("Error, No se Esperaba una Expresion en el retorno" + this.line + "-" + this.column);
+                console.log("Error, No se Esperaba una Expresion en el retorno" + this.line + "-" + this.column);
             }
             const result = this.expresion.execute(tree);
         tree.arbol_ast.push("</ul>");

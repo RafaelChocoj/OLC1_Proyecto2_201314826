@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const gramatica = require("./Gramatica/gramatica");
 const analizador = require('./Gramatica/gramatica.js');
 var app = express();
 app.use(bodyParser.json());
@@ -36,8 +37,9 @@ function parser(entrada) {
     let resul_fin;
     resul_fin = new Array();
     try {
-        //const tree = gramatica.parse(entrada);
-        const tree = analizador.parse(entrada);
+        const tree = gramatica.parse(entrada);
+        //const tree = analizador.parse(entrada);
+        //analizador.clear_lista_erroes();
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
         //console.log(tree);
@@ -76,8 +78,23 @@ function parser(entrada) {
         console.log("-------------------");
         ///errores
         //console.log(gramatica.LisErrores.length);
-        const lex_err = analizador.get_lista_erroes();
+        //analizador.clear_lista_erroes();
+        let lex_err = gramatica.get_lista_erroes();
+        //let lex_err =  analizador.get_lista_erroes();
+        for (let i = 0; i < tree.lis_err.length; i++) {
+            lex_err.push(tree.lis_err[i]);
+        }
+        /*for (let i = 0; i < lex_err.length; i++)
+        {
+          tree.lis_err.push(lex_err[i]);
+        }*/
         let html_err = ErrLex(lex_err);
+        //let html_err = ErrLex(tree.lis_err);
+        while (lex_err.length > 0) {
+            lex_err.pop();
+        }
+        //lex_err=[];
+        //console.log("********");
         //console.log(lex_err);
         //////
         //return null;
@@ -94,8 +111,9 @@ function parser(entrada) {
     }
 }
 function ErrLex(lex_err) {
-    console.log(lex_err);
+    //console.log(lex_err);
     let Contenido_html;
+    Contenido_html = "";
     Contenido_html = "<html>" +
         "<body>" +
         "<h1 align='center'>ERRORES ENCONTRADOS</h1></br>" +

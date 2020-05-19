@@ -36,17 +36,32 @@
     //const {Excepcion} = require('../utils/Exception');*/
     const {Tipo, types} = require('../Abstracto/Tipo');
     const {Tree} = require('../Simbols/Tree');
+    const {ListaErrLex} = require('../Simbols/ListaErrLex');
 
     const lis_Errores=require('../Errores/LisErrores');
     const NError=require('../Errores/NodeErr');
      
       const {NodeErr}=require('../Errores/NodeErr');
-      this.lis_err = new Array()
-      
 
-    exports.get_lista_erroes = function () { 
-          //console.log("tam dentro de gram: " + lis_err.length);
+      lis_err = new Array();
+
+      const ls_lex = new ListaErrLex();
+
+      exports.clear_lista_erroes = function () { 
+          lis_err = [];
+          return 1;
+     };
+     
+      console.log("xxxxxxxx: " + lis_err.length);
+
+      exports.get_lista_erroes = function () { 
+          
+          console.log("Tamaño Original-----" + lis_err.length);
+          console.log(lis_err);
           return lis_err;
+
+          //console.log("Tamaño Original-----" + ls_lex.err_lex.length);
+          //return ls_lex.err_lex;
      };
 
 
@@ -154,7 +169,7 @@ char [\'][^\'\n][\']
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
 
-.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)) //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
+.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)); console.log(yytext + " lex, len: " + lis_err.length); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
             
 
 /lex
