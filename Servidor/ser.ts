@@ -3,7 +3,9 @@ import * as cors from "cors";
 import * as bodyParser from "body-parser";
 import * as gramatica from "./Gramatica/gramatica";
 const analizador = require('./Gramatica/gramatica.js');
+
 import { NodeErr } from './Errores/NodeErr';
+import { Node } from "./Abstracto/Node"
 
 var app=express();
 app.use(bodyParser.json());
@@ -13,20 +15,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let lex_err_final: Array<NodeErr>;
 let lex_err: Array<NodeErr>;
 
+/*original*/
+let principal: Array<Node>;
+/*listado de copias*/
+let lista_copias;
+
 app.post('/AnalizFile/', function (req, res) {
 
-    lex_err_final = new Array<NodeErr>()
+    lex_err_final = new Array<NodeErr>();
+    lista_copias = new Array();
 
     let copias_archivos: Array<String>;
     copias_archivos = req.body.text;
 
     console.log("00000000000000000000000000");
-    //console.log(req.body.text);
-    console.log(copias_archivos);
+    //////////////////console.log(copias_archivos);
     //console.log("22222222");
     var entrada=req.body.text[0];
     //console.log(entrada);
-    console.log("00000000000000000000000000");
+    //////////console.log("00000000000000000000000000");
 
     /*solo original*/
     let resul_fin: Array<String> 
@@ -56,6 +63,8 @@ app.post('/AnalizFile/', function (req, res) {
 
     resul_fin.push(html_err);
     ////////console.log(resul_fin);
+
+    Comparando_copias(principal, lista_copias);
  
     res.send(resul_fin);
 });
@@ -88,10 +97,10 @@ function parser(entrada:string) {
         
         //console.log(tree);
         console.log(tree.instructions);
+        principal = tree.instructions;
         
         //tree.instructions.map((m: any) => {
         tree.instructions.map((m: any) => {
-
         const res = m.execute(tree, false, "NA", false);
 
         });
@@ -106,7 +115,6 @@ function parser(entrada:string) {
         tree.arbol_ast.push("</ul>");
         tree.arbol_ast.push("</div>");
 
-        //for (let i:Number = 0; i < tree.arbol_ast.length; i++)
         for (let i = 0; i < tree.arbol_ast.length; i++)
         {
             ast_carpetas = ast_carpetas + tree.arbol_ast[i] + "\n";
@@ -142,7 +150,7 @@ function parser(entrada:string) {
         //console.log("********");
         //console.log(lex_err);
 
-        /**********************reiniciando*errores***********************************/
+        /************reiniciando*errores******************/
         while(lex_err.length>0){
           lex_err.pop();
         }      
@@ -167,15 +175,18 @@ function parser(entrada:string) {
 
 function parser_copias(entrada:String, numpes:Number) {
   //console.log("copias!!!!!!!!!!");
-  console.log("---: " + entrada)
+  /////console.log("---: " + entrada)
   let resul_fin22: Array<String> 
   resul_fin22 = new Array<String>()
 
   try {
     const tree_cop = gramatica.parse(entrada);    
     console.log(tree_cop.instructions);
+    lista_copias.push(tree_cop.instructions);
 
-
+    tree_cop.instructions.map((m: any) => {
+      const res = m.execute(tree_cop, false, "NA", false);
+    });
 
       for (let i = 0; i < lex_err.length; i++)
       {
@@ -183,11 +194,11 @@ function parser_copias(entrada:String, numpes:Number) {
         lex_err_final.push(lex_err[i]);
       }
 
-      /*for (let i = 0; i < tree.lis_err.length; i++)
+      for (let i = 0; i < tree_cop.lis_err.length; i++)
       {
-        lex_err[i].Origen = "Pestania (" + numpes + ")";
-        lex_err_final.push(tree.lis_err[i]);
-      }*/
+        tree_cop.lis_err[i].Origen = "Pestania (" + numpes + ")";
+        lex_err_final.push(tree_cop.lis_err[i]);
+      }
 
       /********reiniciando*errores******/
       while(lex_err.length>0){
@@ -198,6 +209,23 @@ function parser_copias(entrada:String, numpes:Number) {
   } catch (e) {
       return ["Error en compilacion de Entrada: "+ e.toString()];
   }
+}
+
+function Comparando_copias(ar_principal: Array<Node>, lis_copias:Array<Object>) {
+  console.log("11111111111111111111 verifiando origianl");
+  console.log(ar_principal);
+  console.log("2222222");
+  //console.log(lis_copias);
+
+  /*verificando copia de clase*/
+  for (let i = 0; i < lis_copias.length; i++)
+  {
+    console.log(lis_copias[i]);
+    if( ar_principal[0].identificador == lis_copias[i][0].identificador ){
+      console.log("es copia :v");
+    }
+  }
+
 }
 
 function ErrLex(lex_err:Array<NodeErr>) {

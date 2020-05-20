@@ -11,17 +11,21 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 let lex_err_final;
 let lex_err;
+/*original*/
+let principal;
+/*listado de copias*/
+let lista_copias;
 app.post('/AnalizFile/', function (req, res) {
     lex_err_final = new Array();
+    lista_copias = new Array();
     let copias_archivos;
     copias_archivos = req.body.text;
     console.log("00000000000000000000000000");
-    //console.log(req.body.text);
-    console.log(copias_archivos);
+    //////////////////console.log(copias_archivos);
     //console.log("22222222");
     var entrada = req.body.text[0];
     //console.log(entrada);
-    console.log("00000000000000000000000000");
+    //////////console.log("00000000000000000000000000");
     /*solo original*/
     let resul_fin;
     resul_fin = parser(entrada);
@@ -41,6 +45,7 @@ app.post('/AnalizFile/', function (req, res) {
     //resul_fin.push("fila2");
     resul_fin.push(html_err);
     ////////console.log(resul_fin);
+    Comparando_copias(principal, lista_copias);
     res.send(resul_fin);
 });
 var server = app.listen(8080, function () {
@@ -65,6 +70,7 @@ function parser(entrada) {
         //const res = tree.execute(tree);
         //console.log(tree);
         console.log(tree.instructions);
+        principal = tree.instructions;
         //tree.instructions.map((m: any) => {
         tree.instructions.map((m) => {
             const res = m.execute(tree, false, "NA", false);
@@ -77,7 +83,6 @@ function parser(entrada) {
         tree.arbol_ast.push("</li>");
         tree.arbol_ast.push("</ul>");
         tree.arbol_ast.push("</div>");
-        //for (let i:Number = 0; i < tree.arbol_ast.length; i++)
         for (let i = 0; i < tree.arbol_ast.length; i++) {
             ast_carpetas = ast_carpetas + tree.arbol_ast[i] + "\n";
             console.log(tree.arbol_ast[i]);
@@ -104,7 +109,7 @@ function parser(entrada) {
         //let html_err = ErrLex(lex_err);
         //console.log("********");
         //console.log(lex_err);
-        /**********************reiniciando*errores***********************************/
+        /************reiniciando*errores******************/
         while (lex_err.length > 0) {
             lex_err.pop();
         }
@@ -123,21 +128,24 @@ function parser(entrada) {
 }
 function parser_copias(entrada, numpes) {
     //console.log("copias!!!!!!!!!!");
-    console.log("---: " + entrada);
+    /////console.log("---: " + entrada)
     let resul_fin22;
     resul_fin22 = new Array();
     try {
         const tree_cop = gramatica.parse(entrada);
         console.log(tree_cop.instructions);
+        lista_copias.push(tree_cop.instructions);
+        tree_cop.instructions.map((m) => {
+            const res = m.execute(tree_cop, false, "NA", false);
+        });
         for (let i = 0; i < lex_err.length; i++) {
             lex_err[i].Origen = "Pestania (" + numpes + ")";
             lex_err_final.push(lex_err[i]);
         }
-        /*for (let i = 0; i < tree.lis_err.length; i++)
-        {
-          lex_err[i].Origen = "Pestania (" + numpes + ")";
-          lex_err_final.push(tree.lis_err[i]);
-        }*/
+        for (let i = 0; i < tree_cop.lis_err.length; i++) {
+            tree_cop.lis_err[i].Origen = "Pestania (" + numpes + ")";
+            lex_err_final.push(tree_cop.lis_err[i]);
+        }
         /********reiniciando*errores******/
         while (lex_err.length > 0) {
             lex_err.pop();
@@ -146,6 +154,19 @@ function parser_copias(entrada, numpes) {
     }
     catch (e) {
         return ["Error en compilacion de Entrada: " + e.toString()];
+    }
+}
+function Comparando_copias(ar_principal, lis_copias) {
+    console.log("11111111111111111111 verifiando origianl");
+    console.log(ar_principal);
+    console.log("2222222");
+    //console.log(lis_copias);
+    /*verificando copia de clase*/
+    for (let i = 0; i < lis_copias.length; i++) {
+        console.log(lis_copias[i]);
+        if (ar_principal[0].identificador == lis_copias[i][0].identificador) {
+            console.log("es copia :v");
+        }
     }
 }
 function ErrLex(lex_err) {

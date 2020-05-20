@@ -10,7 +10,6 @@ export class Tree {
     //excepciones: Array<Exception>
     //console: Array<String>
     lis_err: Array<NodeErr>
-
     arbol_ast: Array<String>
 
     constructor(instructions: Array<Node>) {
