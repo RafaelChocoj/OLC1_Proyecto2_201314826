@@ -974,7 +974,7 @@ case 60:return 9
 break;
 case 61:return 5
 break;
-case 62:lis_err.push(new NodeErr("Lexico","Caracter invalido", yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column)); console.log(yy_.yytext + " lex, len: " + lis_err.length); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column))
+case 62:lis_err.push(new NodeErr("Lexico","Caracter invalido", yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column)); console.log(yy_.yytext + " lex, len: " + lis_err.length, "O"); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column))
 break;
 }
 },

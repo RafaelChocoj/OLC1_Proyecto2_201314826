@@ -10,19 +10,40 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let lex_err_final: Array<NodeErr>;
+let lex_err: Array<NodeErr>;
+
 app.post('/AnalizFile/', function (req, res) {
 
+    lex_err_final = new Array<NodeErr>()
+
+    let copias_archivos: Array<String>;
+    copias_archivos = req.body.text;
+
     console.log("00000000000000000000000000");
-    console.log(req.body.text);
-    console.log("22222222");
+    //console.log(req.body.text);
+    console.log(copias_archivos);
+    //console.log("22222222");
     var entrada=req.body.text[0];
-    console.log(entrada);
+    //console.log(entrada);
     console.log("00000000000000000000000000");
 
+    /*solo original*/
     let resul_fin: Array<String> 
-    //resul_fin = new Array<String>()
-
     resul_fin = parser(entrada);
+
+    /*verificando copias*/
+    if (copias_archivos.length > 1 ){
+      for (let i = 1; i < copias_archivos.length; i++)
+      {
+        var entrada_tem:String = copias_archivos[i];
+        parser_copias(entrada_tem, i);
+      }
+    }
+
+    let html_err = ErrLex(lex_err_final);
+    console.log("********");
+    console.log(lex_err_final);
 
     //Errores.clear();
     
@@ -33,6 +54,7 @@ app.post('/AnalizFile/', function (req, res) {
     //resul_fin.push("fila1");
     //resul_fin.push("fila2");
 
+    resul_fin.push(html_err);
     ////////console.log(resul_fin);
  
     res.send(resul_fin);
@@ -72,21 +94,7 @@ function parser(entrada:string) {
 
         const res = m.execute(tree, false, "NA", false);
 
-        //console.log((res instanceof)+ " fin");
-            /*if (res instanceof Break) {
-              const error = new Exception('Semantico',
-                `Sentencia break fuera de un ciclo`,
-                res.line, res.column);
-              tree.excepciones.push(error);
-              tree.console.push(error.toString());
-            } else if (res instanceof Continue) {
-              const error = new Exception('Semantico',
-                `Sentencia continue fuera de un ciclo`,
-                res.line, res.column);
-              tree.excepciones.push(error);
-              tree.console.push(error.toString());
-            }*/
-          });
+        });
 
         console.log("-------------------");
         //console.log(tree.arbol_ast);
@@ -110,27 +118,34 @@ function parser(entrada:string) {
         //console.log(gramatica.LisErrores.length);
 
         //analizador.clear_lista_erroes();
-        let lex_err =  gramatica.get_lista_erroes();
+        //let lex_err =  gramatica.get_lista_erroes();
+        lex_err =  gramatica.get_lista_erroes();
         //let lex_err =  analizador.get_lista_erroes();
         
+        for (let i = 0; i < lex_err.length; i++)
+        {
+          lex_err[i].Origen = "Principal";
+          lex_err_final.push(lex_err[i]);
+        }
+
         for (let i = 0; i < tree.lis_err.length; i++)
         {
-          lex_err.push(tree.lis_err[i]);
+          tree.lis_err[i].Origen = "Principal";
+          lex_err_final.push(tree.lis_err[i]);
         }
         /*for (let i = 0; i < lex_err.length; i++)
         {
           tree.lis_err.push(lex_err[i]);
         }*/
 
-        let html_err = ErrLex(lex_err);
-        //let html_err = ErrLex(tree.lis_err);
+        //let html_err = ErrLex(lex_err);
+        //console.log("********");
+        //console.log(lex_err);
 
-        console.log("********");
-        console.log(lex_err);
-
+        /**********************reiniciando*errores***********************************/
         while(lex_err.length>0){
           lex_err.pop();
-        }       
+        }      
 
         //////
         //return null;
@@ -138,17 +153,52 @@ function parser(entrada:string) {
           resul_fin.push("SE");
         }*/
         
+
         resul_fin.push(ast_carpetas);
-        resul_fin.push(html_err);
+        //resul_fin.push(html_err);
         
 
         return resul_fin;
     } catch (e) {
-        //return "Error en compilacion de Entrada: "+ e.toString();
         return ["Error en compilacion de Entrada: "+ e.toString()];
     }
 }
 
+
+function parser_copias(entrada:String, numpes:Number) {
+  //console.log("copias!!!!!!!!!!");
+  console.log("---: " + entrada)
+  let resul_fin22: Array<String> 
+  resul_fin22 = new Array<String>()
+
+  try {
+    const tree_cop = gramatica.parse(entrada);    
+    console.log(tree_cop.instructions);
+
+
+
+      for (let i = 0; i < lex_err.length; i++)
+      {
+        lex_err[i].Origen = "Pestania (" + numpes + ")";
+        lex_err_final.push(lex_err[i]);
+      }
+
+      /*for (let i = 0; i < tree.lis_err.length; i++)
+      {
+        lex_err[i].Origen = "Pestania (" + numpes + ")";
+        lex_err_final.push(tree.lis_err[i]);
+      }*/
+
+      /********reiniciando*errores******/
+      while(lex_err.length>0){
+        lex_err.pop();
+      }   
+
+    return resul_fin22;
+  } catch (e) {
+      return ["Error en compilacion de Entrada: "+ e.toString()];
+  }
+}
 
 function ErrLex(lex_err:Array<NodeErr>) {
   //console.log(lex_err);
@@ -174,7 +224,10 @@ function ErrLex(lex_err:Array<NodeErr>) {
             "<td><strong>Columna" +
             "</strong></td>" +
 
-             "<td><strong>Tipo" +
+            "<td><strong>Tipo" +
+            "</strong></td>" +
+
+            "<td><strong>Origen" +
             "</strong></td>" +
 
             "</tr>";
@@ -202,6 +255,9 @@ function ErrLex(lex_err:Array<NodeErr>) {
                 "</td>" +
 
                 "<td>" + lex_err[i].tipo +
+                "</td>" +
+
+                "<td>" + lex_err[i].Origen +
                 "</td>" +
 
                 "</tr>";

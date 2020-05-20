@@ -54,6 +54,6 @@ func main() {
 
 	//http.HandleFunc("/otrapagina",index)
 
-	fmt.Printf("6 Servidor escuchando en: http://localhost:3000/")
+	fmt.Printf("01 Servidor escuchando en: http://localhost:3000/")
 	http.ListenAndServe(":3000", nil)
 }

@@ -171,7 +171,7 @@ char [\'][^\'\n][\']
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
 
-.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)); console.log(yytext + " lex, len: " + lis_err.length); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
+.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)); console.log(yytext + " lex, len: " + lis_err.length, "O"); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
             
 
 /lex

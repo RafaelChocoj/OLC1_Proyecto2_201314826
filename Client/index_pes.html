@@ -137,6 +137,7 @@ function rep_err(){
     function Analizar(){
 
       /*creando array para envio de copias*/
+      let list_copias = new Array();
 
       console.clear();
         //let entrada = document.getElementById("txtEntrada").value;
@@ -144,14 +145,23 @@ function rep_err(){
       console.log(lista);
       console.log(lista.length);
       for(var i=0;i<lista.length;i++){
-        console.log(lista[i]);
-        /*if(lista[i].pestana==pestana){
-            delete lista[i];
-        }*/
+        console.log(lista[i].pestana);
+
+        if(lista[i] != null){
+          contenido_tempo=document.getElementById(lista[i].pestana).value;
+          list_copias.push(contenido_tempo);
+        }
+        
     }
+
 
        let entrada=document.getElementById(get_vent()).value;
        console.log(entrada);
+
+       console.log("--");
+       console.log(list_copias);
+
+  
        /* 
        ////Analizador_cadena(entrada);
         //var analisis_lex  = new Lexico(); 

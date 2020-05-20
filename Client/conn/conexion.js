@@ -1,20 +1,28 @@
 function Send(){
 
-    /*prindipal*/
+    /*principal*/
     //var texto = document.getElementById("operacion").value;
     var tprin=document.getElementById('txtSalida').value;
     console.log(tprin);
 
+    /*original*/
+    let list_copias = new Array();
+    list_copias.push(tprin);
+
     /*copias*/
-    let copis_pesta = new Array();
-    copis_pesta.push(tprin);
-    copis_pesta.push("hola");
-    copis_pesta.push("arich 22");
+    for(var i=0;i<lista.length;i++){
+        //console.log(lista[i].pestana);
+        if(lista[i] != null){
+          contenido_tempo=document.getElementById(lista[i].pestana).value;
+          list_copias.push(contenido_tempo);
+        }
+    }
+    
 
     var url='http://localhost:8080/AnalizFile/';
 
     //$.post(url,{text:tprin},function(data,status){
-    $.post(url,{text:copis_pesta},function(data,status){
+    $.post(url,{text:list_copias},function(data,status){
         if(status.toString()=="success"){
             //console.log(data.toString());
             console.log(data);

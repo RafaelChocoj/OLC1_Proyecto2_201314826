@@ -23,7 +23,9 @@ function linkedlist(pestana,nombre) {
 function deletepes(pestana){
     for(var i=0;i<lista.length;i++){
         if(lista[i].pestana==pestana){
-            delete lista[i];
+            //delete lista[i];
+            //lista[i].pop();
+            lista.splice(i, 1);
         }
     }
 }
