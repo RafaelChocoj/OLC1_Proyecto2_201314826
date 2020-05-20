@@ -54,13 +54,13 @@ var entrada = "switch (3*54) {\n" +
     //" case 7: "+
     "bb = 1+2;" +
     "}";
-var entrada = "/*import ClaseA;" +
-    "import ClaseB;*/ \nclass ClaseC{\n" +
+var entrada = "import ClaseA;" +
+    "import ClaseB; \nclass ClaseC{\n" +
     "/*\n" +
     "Cuerpo de la clase C\n " +
     "*/\n" +
     "@ void suma() { " +
-    "If( 3 < 4) # { while(1>a || a ==b){ /*return 25*2;*/} }" +
+    "if( 3 < 4) # { while(1>a || a ==b){ /*return 25*2;*/} }" +
     "System.out.println(\"7 elevado al cubo es: \"+3);" +
     //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
     "return !(true || 1>a) ; }\n" +

@@ -69,7 +69,8 @@
 
 /*inicio Lexico*/
 %lex
-%options case-insensitive
+//%options case-insensitive
+%options case-sensitive
 
 /*expresiones regulares*/
 entero [0-9]+
@@ -108,10 +109,10 @@ char [\'][^\'\n][\']
 //++
 
 /*relacionales*/
-"<"                   return '<'
-">"                   return '>'
 "<="                  return '<='
 ">="                  return '>='
+"<"                   return '<'
+">"                   return '>'
 "=="                  return '=='
 "!="                  return '!='
 /*logicas*/

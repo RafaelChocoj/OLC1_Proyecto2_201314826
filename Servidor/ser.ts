@@ -11,8 +11,13 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/AnalizFile/', function (req, res) {
-    var entrada=req.body.text;
-    //console.log(entrada);
+
+    console.log("00000000000000000000000000");
+    console.log(req.body.text);
+    console.log("22222222");
+    var entrada=req.body.text[0];
+    console.log(entrada);
+    console.log("00000000000000000000000000");
 
     let resul_fin: Array<String> 
     //resul_fin = new Array<String>()
@@ -125,12 +130,7 @@ function parser(entrada:string) {
 
         while(lex_err.length>0){
           lex_err.pop();
-        }
-        //lex_err=[];
-        //console.log("********");
-        //console.log(lex_err);
-
-        
+        }       
 
         //////
         //return null;

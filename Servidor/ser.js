@@ -10,8 +10,12 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/AnalizFile/', function (req, res) {
-    var entrada = req.body.text;
-    //console.log(entrada);
+    console.log("00000000000000000000000000");
+    console.log(req.body.text);
+    console.log("22222222");
+    var entrada = req.body.text[0];
+    console.log(entrada);
+    console.log("00000000000000000000000000");
     let resul_fin;
     //resul_fin = new Array<String>()
     resul_fin = parser(entrada);
@@ -90,12 +94,11 @@ function parser(entrada) {
         }*/
         let html_err = ErrLex(lex_err);
         //let html_err = ErrLex(tree.lis_err);
+        console.log("********");
+        console.log(lex_err);
         while (lex_err.length > 0) {
             lex_err.pop();
         }
-        //lex_err=[];
-        //console.log("********");
-        //console.log(lex_err);
         //////
         //return null;
         /*if (lex_err.length > 0){

@@ -124,16 +124,6 @@ function rep_err(){
   //var venta = window.open("ReporteErr.html", "ReportesErrores");
   var venta = window.open("", "ReportesErrores")
   venta.document.write(string_errores);
-
-  //window.open('ReporteErr.html?errs='+string_errores);
-  //window.open('ReporteErr.html?val='+"aqui texto");
-  
-  ////venta.document.write("<meta charset=\"utf-8\">");
-  //venta.document.write("<meta charset=\"utf-8\">");
-  //venta.document.write("<p>This is 'MsgWindow'. I am 200px wide and 100px tall!</p>");
- 
-  //venta.document.write("<pre id=\"contenido-archivo\"></pre>");
-  
 }
 </script>
 
@@ -146,11 +136,24 @@ function rep_err(){
 
     function Analizar(){
 
+      /*creando array para envio de copias*/
+
       console.clear();
         //let entrada = document.getElementById("txtEntrada").value;
-        let entrada=document.getElementById(get_vent()).value;
+      console.log(get_vent());
+      console.log(lista);
+      console.log(lista.length);
+      for(var i=0;i<lista.length;i++){
+        console.log(lista[i]);
+        /*if(lista[i].pestana==pestana){
+            delete lista[i];
+        }*/
+    }
 
-        ////Analizador_cadena(entrada);
+       let entrada=document.getElementById(get_vent()).value;
+       console.log(entrada);
+       /* 
+       ////Analizador_cadena(entrada);
         //var analisis_lex  = new Lexico(); 
         //analisis_lex.Analizador_cadena(entrada);
 
@@ -183,19 +186,6 @@ function rep_err(){
 
         var salida = sin.return_python();
         document.getElementById("txtSalida").value = salida;
-
-        /*while (document.getElementById("div_Sal").firstChild) {
-          document.getElementById("div_Sal").removeChild(document.getElementById("div_Sal").firstChild);
-        }
-        ////////
-        var editor = CodeMirror.fromTextArea(document.getElementById("txtSalida"), {
-            mode: {name: "python",
-                  version: 3,
-                  singleLineStringErrors: false},
-            lineNumbers: true,
-            indentUnit: 4,
-            matchBrackets: true
-        });*/
 
 
         var act=document.getElementById('div_Sal');
@@ -230,7 +220,7 @@ function rep_err(){
         document.getElementById("txtHtml").value = ht;
 
         let json = sal_json.return_json();
-        document.getElementById("txtJson").value = json;
+        document.getElementById("txtJson").value = json;*/
 
       
 
@@ -280,9 +270,6 @@ function rep_err(){
 <script src="../conn/jquery.min.js"></script>
 <script src="../conn/jquery.backtotop.js"></script>
 <script src="../conn/jquery.mobilemenu.js"></script>
-<!--
-
--->
 
 <!--
 <script type="text/javascript" src="..index_pes.js"></script>
