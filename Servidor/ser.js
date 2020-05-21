@@ -54,8 +54,8 @@ app.post('/AnalizFile/', function (req, res) {
         }
     }
     let html_err = ErrLex(lex_err_final);
-    console.log("********");
-    console.log(lex_err_final);
+    //////////////console.log("********");
+    //////////////console.log(lex_err_final);
     //Errores.clear();
     //res.send(resultado.toString());
     //resul_fin.push("fila1");
@@ -63,7 +63,8 @@ app.post('/AnalizFile/', function (req, res) {
     resul_fin.push(html_err);
     Comparando_copias(principal, lista_copias);
     html_clasecopia = html_clasecopia + "</table>";
-    resul_fin.push(html_clasecopia);
+    html_funcionescopia = html_funcionescopia + "</table>";
+    resul_fin.push(html_clasecopia + html_funcionescopia);
     //console.log(html_clasecopia);
     res.send(resul_fin);
 });
@@ -104,7 +105,7 @@ function parser(entrada) {
         tree.arbol_ast.push("</div>");
         for (let i = 0; i < tree.arbol_ast.length; i++) {
             ast_carpetas = ast_carpetas + tree.arbol_ast[i] + "\n";
-            console.log(tree.arbol_ast[i]);
+            ///////////////console.log(tree.arbol_ast[i]);
         }
         console.log("-------------------");
         ///errores
@@ -183,6 +184,7 @@ function Comparando_copias(ar_principal, lis_copias) {
     /*verificando copia de clase CLASE*/
     for (let i = 0; i < lis_copias.length; i++) {
         html_clasecopia_tempo = "";
+        html_funcionescopia_tempo = "";
         let clas_tempo = lis_copias[i];
         console.log(clas_tempo);
         if (ar_principal[0].identificador == clas_tempo[0].identificador) {
@@ -207,6 +209,17 @@ function Comparando_copias(ar_principal, lis_copias) {
             else {
                 html_clasecopia_tempo = "";
                 console.log("no no no no no fin fin  COPIA pes " + (i + 1));
+            }
+            /*verificando funciones copias*/
+            let is_funcopia;
+            is_funcopia = Copia_FUNCIONES(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase, ar_principal[0].identificador, i);
+            if (is_funcopia == true) {
+                console.log("si si si par par  COPIA pes " + (i + 1));
+                html_funcionescopia = html_funcionescopia + html_funcionescopia_tempo;
+            }
+            else {
+                html_funcionescopia_tempo = "";
+                console.log("par par par no no no COPIA pes " + (i + 1));
             }
         }
     }
@@ -288,9 +301,10 @@ function Recorriendo_MetFun(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) 
                 for (let c = 0; c < ListInstruc_cop.length; c++) {
                     const copy_fun = ListInstruc_cop[c];
                     if (copy_fun instanceof Funcion_1.Funcion) {
-                        console.log("or id fun " + res.identificador + "  or  tipo fun " + res.type.toString());
-                        console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
+                        //console.log("or id fun " + res.identificador + "  or  tipo fun " + res.type.toString());
+                        //console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
                         if (res.identificador == copy_fun.identificador && res.type.toString() == copy_fun.type.toString()) {
+                            console.log(res.ListParametros);
                             console.log("funcion igual " + res.identificador);
                             /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
                             "<td>" + pesta +
@@ -314,8 +328,99 @@ function Recorriendo_MetFun(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) 
     }
     return Is_Copy;
 }
-/*function Es_funMetCop(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) {
-}*/
+function Copia_FUNCIONES(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) {
+    /*FUNCIONES Y EVENTOS DE LA CLASE*/
+    let Is_Copy = false;
+    for (let i = 0; i < ListInstruc_ori.length; i++) {
+        /*lista de instrucciones*/
+        const res = ListInstruc_ori[i];
+        if (res instanceof Metodo_1.Metodo || res instanceof Funcion_1.Funcion) {
+            Is_Copy = false;
+            /*METODO*/
+            if (res instanceof Metodo_1.Metodo) {
+                console.log("5---par-------es metodo");
+                /*verificando si tiene el mismo metodo en las copias*/
+                for (let c = 0; c < ListInstruc_cop.length; c++) {
+                    const copy = ListInstruc_cop[c];
+                    if (copy instanceof Metodo_1.Metodo) {
+                        /*verificando el los parametros*/
+                        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        //////console.log(res.ListParametros);
+                        //////console.log(copy.ListParametros);
+                        //if (res.identificador == copy.identificador)
+                        /*el mismo tamaño de parametros*/
+                        if (res.ListParametros.length == copy.ListParametros.length) {
+                            /*verificando tipo y nombre de parametros*/
+                            let par_igual = false;
+                            let row_parametro = new Array();
+                            for (let par = 0; par < res.ListParametros.length; par++) {
+                                if (res.ListParametros[par].type.toString() == copy.ListParametros[par].type.toString() &&
+                                    res.ListParametros[par].identificador == copy.ListParametros[par].identificador) {
+                                    par_igual = true;
+                                    console.log(res.ListParametros[par].type.toString() + "==" + copy.ListParametros[par].type.toString());
+                                    row_parametro.push(copy.ListParametros[par].type.toString() + " " + copy.ListParametros[par].identificador);
+                                }
+                                else {
+                                    par_igual = false;
+                                    par = res.ListParametros.length;
+                                }
+                            }
+                            if (par_igual == true) {
+                                console.log("parametro igual " + res.identificador);
+                                html_funcionescopia_tempo = html_funcionescopia_tempo + "<tr>" +
+                                    "<td> Pestania(" + (pesta + 1) + ")" +
+                                    "</td>" +
+                                    "<td> void" +
+                                    "</td>" +
+                                    "<td>" + res.identificador +
+                                    "</td>" +
+                                    "<td>" + copy.identificador +
+                                    "</td>" +
+                                    "<td>" + row_parametro +
+                                    "</td>" +
+                                    "<td>" + nameclass +
+                                    "</td>" +
+                                    "</tr>";
+                                Is_Copy = true;
+                            }
+                        }
+                    }
+                }
+                /*FUNCION*/
+            }
+            else if (res instanceof Funcion_1.Funcion) {
+                console.log("----- es funcuin ");
+                /*verificando si tiene la misma guncion en las copias*/
+                for (let c = 0; c < ListInstruc_cop.length; c++) {
+                    const copy_fun = ListInstruc_cop[c];
+                    if (copy_fun instanceof Funcion_1.Funcion) {
+                        //console.log("or id fun " + res.identificador + "  or  tipo fun " + res.type.toString());
+                        //console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
+                        if (res.identificador == copy_fun.identificador && res.type.toString() == copy_fun.type.toString()) {
+                            console.log(res.ListParametros);
+                            console.log("funcion igual " + res.identificador);
+                            /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
+                            "<td>" + pesta +
+                            "</td>" +
+              
+                            "<td>" + nameclass +
+                            "</td>" +
+              
+                            "<td> FUN: " + copy_fun.identificador +
+                            "</td>" +
+                            "</tr>";*/
+                            Is_Copy = true;
+                        }
+                    }
+                }
+            }
+            if (Is_Copy == false) {
+                return Is_Copy;
+            }
+        }
+    }
+    return Is_Copy;
+}
 function ClaseCopia_rows(nameclass, pesta) {
     html_clasecopia_tempo = html_clasecopia_tempo + "<tr>" +
         "<td> Pestania(" + (pesta + 1) + ")" +
@@ -329,6 +434,34 @@ function ClaseCopia_rows(nameclass, pesta) {
         "</tr>";
 }
 function ini_ClaseCopia() {
+    html_clasecopia = "<h2 align='center'>Clases Copias</h2></br>" +
+        "<table cellpadding='10' border = '1' align='center'>" +
+        "<tr>" +
+        "<td><strong>Origen" +
+        "</strong></td>" +
+        "<td><strong>Nombre Clase" +
+        "</strong></td>" +
+        "<td><strong>No. Metodo" +
+        "</strong></td>" +
+        "<td><strong>No. Funcion" +
+        "</strong></td>" +
+        "</tr>";
+    html_funcionescopia = "<h2 align='center'>Funciones/Metodos Copia</h2>" +
+        "<table cellpadding='10' border = '1' align='center'>" +
+        "<tr>" +
+        "<td><strong>Origen" +
+        "</strong></td>" +
+        "<td><strong>Tipo Retorno" +
+        "</strong></td>" +
+        "<td><strong>Funcion/Metodo (Original)" +
+        "</strong></td>" +
+        "<td><strong>Funcion/Metodo (Copia)" +
+        "</strong></td>" +
+        "<td><strong>Parametros" +
+        "</strong></td>" +
+        "<td><strong>Nombre Clase" +
+        "</strong></td>" +
+        "</tr>";
     /*html_clasecopia = "<h1 align='center'>Clases Copias</h1></br>" +
     "<table cellpadding='10' border = '1' align='center'>" +
     "<tr>" +
@@ -342,18 +475,6 @@ function ini_ClaseCopia() {
     "<td><strong>Nombre Metodo/Funcion" +
     "</strong></td>" +
     "</tr>";*/
-    html_clasecopia = "<h1 align='center'>Clases Copias</h1></br>" +
-        "<table cellpadding='10' border = '1' align='center'>" +
-        "<tr>" +
-        "<td><strong>Origen" +
-        "</strong></td>" +
-        "<td><strong>Nombre Clase" +
-        "</strong></td>" +
-        "<td><strong>No. Metodo" +
-        "</strong></td>" +
-        "<td><strong>No. Funcion" +
-        "</strong></td>" +
-        "</tr>";
 }
 function ErrLex(lex_err) {
     //console.log(lex_err);
