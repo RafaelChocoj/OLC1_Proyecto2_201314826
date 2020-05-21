@@ -6,6 +6,11 @@ const analizador = require('./Gramatica/gramatica.js');
 
 import { NodeErr } from './Errores/NodeErr';
 import { Node } from "./Abstracto/Node"
+import {types, Tipo } from "./Abstracto/Tipo";
+
+import { Clase } from "./ClasesF/Clase";
+import {Metodo}  from "./ClasesF/Metodo";
+import {Funcion}  from "./ClasesF/Funcion";
 
 var app=express();
 app.use(bodyParser.json());
@@ -20,10 +25,29 @@ let principal: Array<Node>;
 /*listado de copias*/
 let lista_copias;
 
+/*reporte de Clases copias*/
+//let clase_copias:Array<String>;
+let html_clasecopia:String;
+let html_clasecopia_tempo:String;
+
+let metodos_or:number = 0;
+let funcion_or:number = 0;
+let metodos_cop:number = 0;
+let funcion_cop:number = 0;
+
+/*reporte de FUNCIONES copias*/
+let html_funcionescopia:String;
+let html_funcionescopia_tempo:String;
+
 app.post('/AnalizFile/', function (req, res) {
 
     lex_err_final = new Array<NodeErr>();
     lista_copias = new Array();
+
+    /*reporte de Clases copias*/
+    html_clasecopia = "";
+    html_funcionescopia = "";
+    ini_ClaseCopia();
 
     let copias_archivos: Array<String>;
     copias_archivos = req.body.text;
@@ -62,9 +86,15 @@ app.post('/AnalizFile/', function (req, res) {
     //resul_fin.push("fila2");
 
     resul_fin.push(html_err);
-    ////////console.log(resul_fin);
-
+    
     Comparando_copias(principal, lista_copias);
+
+    html_clasecopia = html_clasecopia + "</table>";
+    resul_fin.push(html_clasecopia);
+    //console.log(html_clasecopia);
+
+
+    
  
     res.send(resul_fin);
 });
@@ -211,20 +241,229 @@ function parser_copias(entrada:String, numpes:Number) {
   }
 }
 
-function Comparando_copias(ar_principal: Array<Node>, lis_copias:Array<Object>) {
+function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) {
   console.log("11111111111111111111 verifiando origianl");
   console.log(ar_principal);
   console.log("2222222");
   //console.log(lis_copias);
 
-  /*verificando copia de clase*/
+  /*verificando copia de clase CLASE*/
   for (let i = 0; i < lis_copias.length; i++)
   {
-    console.log(lis_copias[i]);
-    if( ar_principal[0].identificador == lis_copias[i][0].identificador ){
-      console.log("es copia :v");
+    html_clasecopia_tempo = "";
+
+    let clas_tempo:Clase = lis_copias[i];
+    console.log(clas_tempo);
+    if( ar_principal[0].identificador == clas_tempo[0].identificador ){
+      console.log("*********************es copia :v ** pes " + (i +1)); //mismo nombre de clase
+      
+      /*verificando si tiene la misma cantidad*/
+      metodos_or = 0;
+      funcion_or = 0;
+      metodos_cop = 0;
+      funcion_cop = 0;
+
+      let igual_tam_clase:Boolean;
+      igual_tam_clase = Num_MetFun(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase);
+      /*verificando si son iguales*/
+      let is_copia:Boolean;
+      is_copia = Recorriendo_MetFun(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase, ar_principal[0].identificador, i);
+
+      /*para clase copia*/
+      //if (is_copia == true){
+      if (is_copia == true && igual_tam_clase == true) {
+        console.log("fin fin fin fin fin fin fin  COPIA pes " + (i +1));
+        ClaseCopia_rows(ar_principal[0].identificador, i);
+        html_clasecopia = html_clasecopia + html_clasecopia_tempo;
+      }
+      else {
+        html_clasecopia_tempo = "";
+        console.log("no no no no no fin fin  COPIA pes " + (i +1));
+      }
+
+
     }
   }
+}
+
+function Num_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) {
+
+  metodos_or = 0;
+  funcion_or = 0;
+  metodos_cop = 0;
+  funcion_cop = 0;
+
+  for (let i = 0; i < ListInstruc_ori.length; i++) {
+    const res = ListInstruc_ori[i];
+    if(res instanceof Metodo){
+      metodos_or = metodos_or + 1;
+    } else if(res instanceof Funcion){
+      funcion_or = funcion_or + 1;
+    }
+  }
+
+  for (let i = 0; i < ListInstruc_cop.length; i++) {
+    const res_cop = ListInstruc_cop[i];
+    if(res_cop instanceof Metodo){
+      metodos_cop = metodos_cop + 1;
+    } else if(res_cop instanceof Funcion){
+      funcion_cop = funcion_cop + 1;
+    }
+  }
+
+  console.log("123 123 123 123 123 123 123 132 132 123");
+  console.log(ListInstruc_ori);
+  console.log(ListInstruc_cop);
+  console.log("original : M-" + metodos_or + " F-"+funcion_or);
+  console.log("copia : M-" + metodos_cop + " F-"+funcion_cop);
+
+
+
+  if (metodos_or == metodos_cop && funcion_or == funcion_cop){
+    return true;
+  }
+  else {
+    return false;
+  }
+
+
+}
+  
+
+function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>, nameclass:String, pesta:Number) {
+
+  /*FUNCIONES Y EVENTOS DE LA CLASE*/
+  let Is_Copy:Boolean = false;
+  //let lis_cop:Array<Boolean> = new Array<Boolean>();
+  for (let i = 0; i < ListInstruc_ori.length; i++) {
+    /*lista de instrucciones*/
+    const res = ListInstruc_ori[i];
+    if(res instanceof Metodo || res instanceof Funcion)
+    {
+    //if(res instanceof Metodo ){
+      Is_Copy = false;
+      /*METODO*/
+      if(res instanceof Metodo){
+          console.log("55555555555555es metodo");
+          /*verificando si tiene el mismo metodo en las copias*/
+          for (let c = 0; c < ListInstruc_cop.length; c++) {
+            const copy = ListInstruc_cop[c];
+            if(copy instanceof Metodo){
+              if (res.identificador == copy.identificador)
+              {
+                console.log("metodo igual " + res.identificador);
+                /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
+                "<td>" + pesta +
+                "</td>" +
+
+                "<td>" + nameclass +
+                "</td>" +
+
+                "<td> MET: " + copy.identificador +
+                "</td>" +
+                "</tr>";*/
+                Is_Copy = true;
+                //html_clasecopia
+              }
+            }
+          }
+          
+
+      /*FUNCION*/
+      }else if( res instanceof Funcion){
+        console.log("55555555555555es funcuin ");
+        /*verificando si tiene la misma guncion en las copias*/
+        for (let c = 0; c < ListInstruc_cop.length; c++) {
+          const copy_fun = ListInstruc_cop[c];
+          if(copy_fun instanceof Funcion){
+            console.log("or id fun " + res.identificador + "  or  tipo fun " + res.type.toString());
+            console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
+            if (res.identificador == copy_fun.identificador && res.type.toString() == copy_fun.type.toString())
+            {
+              console.log("funcion igual " + res.identificador);
+              /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
+              "<td>" + pesta +
+              "</td>" +
+
+              "<td>" + nameclass +
+              "</td>" +
+
+              "<td> FUN: " + copy_fun.identificador +
+              "</td>" +
+              "</tr>";*/
+              Is_Copy = true;
+            }
+          }
+        }
+
+
+      }
+
+      if (Is_Copy == false) {
+        return Is_Copy;
+      }
+
+    }
+
+  }
+  return Is_Copy;
+}
+
+/*function Es_funMetCop(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) {
+}*/
+
+function ClaseCopia_rows(nameclass:String, pesta:number ) {
+
+  html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
+  "<td> Pestania(" + (pesta+1) + ")"+
+  "</td>" +
+
+  "<td>" + nameclass +
+  "</td>" +
+
+  "<td> " + metodos_or +
+  "</td>" +
+
+  "<td> " + funcion_or +
+  "</td>" +
+
+  "</tr>";
+
+}
+
+function ini_ClaseCopia() {
+
+  /*html_clasecopia = "<h1 align='center'>Clases Copias</h1></br>" +
+  "<table cellpadding='10' border = '1' align='center'>" +
+  "<tr>" +
+
+  "<td><strong>Origen" +
+  "</strong></td>" +
+
+  "<td><strong>Nombre Clase" +
+  "</strong></td>" +
+
+  "<td><strong>Nombre Metodo/Funcion" +
+  "</strong></td>" +
+  "</tr>";*/
+
+  html_clasecopia = "<h1 align='center'>Clases Copias</h1></br>" +
+  "<table cellpadding='10' border = '1' align='center'>" +
+  "<tr>" +
+
+  "<td><strong>Origen" +
+  "</strong></td>" +
+
+  "<td><strong>Nombre Clase" +
+  "</strong></td>" +
+
+  "<td><strong>No. Metodo" +
+  "</strong></td>" +
+
+  "<td><strong>No. Funcion" +
+  "</strong></td>" +
+
+  "</tr>";
 
 }
 

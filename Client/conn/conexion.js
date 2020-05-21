@@ -42,6 +42,11 @@ function Send(){
             var elemento = document.getElementById('contenido-html');
             elemento.innerHTML = html_erros;
 
+            /*copuas clase*/
+            var html_clasecop = data[2];
+            var elemento = document.getElementById('contenido-copy_clase');
+            elemento.innerHTML = html_clasecop;
+
 
 
 
