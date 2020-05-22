@@ -9,11 +9,15 @@ export class Funcion extends Node {
     ListParametros: Array<Node>;
     ListInstruc: Array<Node>;
 
+    ListAllVar: Array<Node>;
+
     constructor(type:Tipo, identificador: String, ListParametros: Array<Node>, ListInstruc: Array<Node>, line: Number, column: Number) {
         super(type, line, column);
         this.identificador = identificador;
         this.ListParametros = ListParametros;
         this.ListInstruc = ListInstruc;
+
+        this.ListAllVar = new Array<Node>();
     }
 
 

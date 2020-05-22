@@ -7,6 +7,7 @@ class Funcion extends Node_1.Node {
         this.identificador = identificador;
         this.ListParametros = ListParametros;
         this.ListInstruc = ListInstruc;
+        this.ListAllVar = new Array();
     }
     execute(tree) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : MAIN }'>Funcion");

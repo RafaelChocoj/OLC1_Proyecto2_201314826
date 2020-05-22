@@ -5,6 +5,7 @@ import { types } from "../Abstracto/Tipo";
 
 import { Break } from '../ClasesF/Break';
 import { Continue } from '../ClasesF/Continue';
+import {Declaracion}  from "../Instrucciones/Declaracion";
 
 export class If extends Node {
     condicion: Node;
@@ -18,7 +19,7 @@ export class If extends Node {
         this.ElseList = ElseList;
     }
 
-    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean) {
+    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean, ListAllVar:Array<Node>) {
 
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>If");
         tree.arbol_ast.push("<ul>");
@@ -33,7 +34,10 @@ export class If extends Node {
             tree.arbol_ast.push("<ul>");
 
             for (let i = 0; i < this.IfList.length; i++) {
-                const res = this.IfList[i].execute(tree, in_bucle, T_return, in_switch);
+                if(this.IfList[i] instanceof Declaracion){
+                    ListAllVar.push(this.IfList[i]);
+                }
+                const res = this.IfList[i].execute(tree, in_bucle, T_return, in_switch, ListAllVar);
                 //console.log("res " + res);
                 //console.log("is bre " + (this.IfList[i] instanceof Break));
 
@@ -58,7 +62,11 @@ export class If extends Node {
                 tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista ELSE Instrucciones");
                 tree.arbol_ast.push("<ul>");
                 for (let i = 0; i < this.ElseList.length; i++) {
-                    const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch);
+
+                    if(this.ElseList[i] instanceof Declaracion){
+                        ListAllVar.push(this.ElseList[i]);
+                    }
+                    const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch, ListAllVar);
                     
                     if (in_bucle == false){
                         if(res instanceof Continue){

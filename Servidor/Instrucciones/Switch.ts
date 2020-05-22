@@ -1,6 +1,8 @@
 import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
 import { types } from "../Abstracto/Tipo";
+import {Declaracion}  from "../Instrucciones/Declaracion";
+
 
 
 export class Switch extends Node {
@@ -16,7 +18,7 @@ export class Switch extends Node {
     }
 
 
-    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean) {
+    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean, ListAllVar:Array<Node>) {
 
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Switch");
         tree.arbol_ast.push("<ul>");
@@ -31,7 +33,11 @@ export class Switch extends Node {
                 //tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>CASE");
                 //tree.arbol_ast.push("<ul>");
                 for (let i = 0; i < this.CasesList.length; i++) {
-                    const res = this.CasesList[i].execute(tree, in_bucle, T_return, true);
+
+                    if(this.CasesList[i] instanceof Declaracion){
+                        ListAllVar.push(this.CasesList[i]);
+                    }
+                    const res = this.CasesList[i].execute(tree, in_bucle, T_return, true, ListAllVar);
                     /*if(res instanceof Continue || res instanceof Break){
                        return res;
                    }*/
@@ -43,7 +49,10 @@ export class Switch extends Node {
             //    tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Default");
             //    tree.arbol_ast.push("<ul>");
                 for (let i = 0; i < this.defaulList.length; i++) {
-                    const res = this.defaulList[i].execute(tree, in_bucle, T_return, true);
+                    if(this.defaulList[i] instanceof Declaracion){
+                        ListAllVar.push(this.defaulList[i]);
+                    }
+                    const res = this.defaulList[i].execute(tree, in_bucle, T_return, true, ListAllVar);
                     /*if(res instanceof Continue || res instanceof Break){
                        return res;
                    }*/

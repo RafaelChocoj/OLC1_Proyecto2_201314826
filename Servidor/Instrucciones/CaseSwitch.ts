@@ -3,6 +3,8 @@ import { Tree } from "../Simbols/Tree";
 import { types } from "../Abstracto/Tipo";
 import { Continue } from '../ClasesF/Continue';
 
+import {Declaracion}  from "../Instrucciones/Declaracion";
+
 
 export class CaseSwitch extends Node {
     expre: Node;
@@ -16,7 +18,7 @@ export class CaseSwitch extends Node {
     }
 
 
-    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean) {
+    execute(tree: Tree, in_bucle:Boolean, T_return:String, in_switch:Boolean, ListAllVar:Array<Node>) {
 
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Case");
         tree.arbol_ast.push("<ul>");
@@ -33,7 +35,11 @@ export class CaseSwitch extends Node {
                 tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
                 tree.arbol_ast.push("<ul>");
                 for (let i = 0; i < this.ListInstruc.length; i++) {
-                    const res = this.ListInstruc[i].execute(tree, in_bucle, T_return, true);
+
+                    if(this.ListInstruc[i] instanceof Declaracion){
+                        ListAllVar.push(this.ListInstruc[i]);
+                    }
+                    const res = this.ListInstruc[i].execute(tree, in_bucle, T_return, true, ListAllVar);
                     /*if(res instanceof Continue || res instanceof Break){
                         return res;
                     }*/

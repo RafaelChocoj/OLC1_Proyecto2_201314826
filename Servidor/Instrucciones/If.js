@@ -4,6 +4,7 @@ const Node_1 = require("../Abstracto/Node");
 const NodeErr_1 = require("../Errores/NodeErr");
 const Break_1 = require("../ClasesF/Break");
 const Continue_1 = require("../ClasesF/Continue");
+const Declaracion_1 = require("../Instrucciones/Declaracion");
 class If extends Node_1.Node {
     constructor(condicion, IfList, ElseList, line, column) {
         super(null, line, column);
@@ -11,7 +12,7 @@ class If extends Node_1.Node {
         this.IfList = IfList;
         this.ElseList = ElseList;
     }
-    execute(tree, in_bucle, T_return, in_switch) {
+    execute(tree, in_bucle, T_return, in_switch, ListAllVar) {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>If");
         tree.arbol_ast.push("<ul>");
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Condicion");
@@ -22,7 +23,10 @@ class If extends Node_1.Node {
         tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista IF Instrucciones");
         tree.arbol_ast.push("<ul>");
         for (let i = 0; i < this.IfList.length; i++) {
-            const res = this.IfList[i].execute(tree, in_bucle, T_return, in_switch);
+            if (this.IfList[i] instanceof Declaracion_1.Declaracion) {
+                ListAllVar.push(this.IfList[i]);
+            }
+            const res = this.IfList[i].execute(tree, in_bucle, T_return, in_switch, ListAllVar);
             //console.log("res " + res);
             //console.log("is bre " + (this.IfList[i] instanceof Break));
             if (in_bucle == false) {
@@ -44,7 +48,10 @@ class If extends Node_1.Node {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista ELSE Instrucciones");
             tree.arbol_ast.push("<ul>");
             for (let i = 0; i < this.ElseList.length; i++) {
-                const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch);
+                if (this.ElseList[i] instanceof Declaracion_1.Declaracion) {
+                    ListAllVar.push(this.ElseList[i]);
+                }
+                const res = this.ElseList[i].execute(tree, in_bucle, T_return, in_switch, ListAllVar);
                 if (in_bucle == false) {
                     if (res instanceof Continue_1.Continue) {
                         tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column));

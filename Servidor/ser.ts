@@ -39,6 +39,10 @@ let funcion_cop:number = 0;
 let html_funcionescopia:String;
 let html_funcionescopia_tempo:String;
 
+/*reporte de VARIABLES copias*/
+let html_variablescopia:String;
+let html_variablescopia_tempo:String;
+
 app.post('/AnalizFile/', function (req, res) {
 
     lex_err_final = new Array<NodeErr>();
@@ -47,6 +51,7 @@ app.post('/AnalizFile/', function (req, res) {
     /*reporte de Clases copias*/
     html_clasecopia = "";
     html_funcionescopia = "";
+    html_variablescopia = "";
     ini_ClaseCopia();
 
     let copias_archivos: Array<String>;
@@ -91,8 +96,9 @@ app.post('/AnalizFile/', function (req, res) {
 
     html_clasecopia = html_clasecopia + "</table>";
     html_funcionescopia = html_funcionescopia + "</table>";
+    html_variablescopia = html_variablescopia + "</table>";
 
-    resul_fin.push(html_clasecopia + html_funcionescopia);
+    resul_fin.push(html_clasecopia + html_funcionescopia + html_variablescopia);
     //console.log(html_clasecopia);
 
 
@@ -137,7 +143,7 @@ function parser(entrada:string) {
 
         });
 
-        console.log("-------------------");
+        ////////console.log("-------------------");
         //console.log(tree.arbol_ast);
         let ast_carpetas:String;
         ast_carpetas = "";
@@ -152,7 +158,7 @@ function parser(entrada:string) {
             ast_carpetas = ast_carpetas + tree.arbol_ast[i] + "\n";
             ///////////////console.log(tree.arbol_ast[i]);
         }
-        console.log("-------------------");
+        ///////////console.log("-------------------");
         ///errores
 
         //console.log(gramatica.LisErrores.length);
@@ -246,7 +252,7 @@ function parser_copias(entrada:String, numpes:Number) {
 function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) {
   console.log("11111111111111111111 verifiando origianl");
   console.log(ar_principal);
-  console.log("2222222");
+  /////console.log("2222222");
   //console.log(lis_copias);
 
   /*verificando copia de clase CLASE*/
@@ -367,16 +373,6 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
               if (res.identificador == copy.identificador)
               {
                 console.log("metodo igual " + res.identificador);
-                /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
-                "<td>" + pesta +
-                "</td>" +
-
-                "<td>" + nameclass +
-                "</td>" +
-
-                "<td> MET: " + copy.identificador +
-                "</td>" +
-                "</tr>";*/
                 Is_Copy = true;
                 //html_clasecopia
               }
@@ -397,16 +393,6 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
             {
               console.log(res.ListParametros);
               console.log("funcion igual " + res.identificador);
-              /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
-              "<td>" + pesta +
-              "</td>" +
-
-              "<td>" + nameclass +
-              "</td>" +
-
-              "<td> FUN: " + copy_fun.identificador +
-              "</td>" +
-              "</tr>";*/
               Is_Copy = true;
             }
           }
@@ -485,9 +471,13 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                   "</td>" +
                   "<td>" + nameclass +
                   "</td>" +
-
                   "</tr>";
                   Is_Copy = true;
+
+                  /*verifianco las variables*/
+                  console.log("aaaaa met instrucciones del met");
+                  console.log(res.ListAllVar);
+
                 }
               }
 
@@ -610,7 +600,7 @@ function ClaseCopia_rows(nameclass:String, pesta:number ) {
 
 function ini_ClaseCopia() {
 
-  html_clasecopia = "<h2 align='center'>Clases Copias</h2></br>" +
+  html_clasecopia = "<h2 align='center'>Clases Copias</h2>" + // </br>
   "<table cellpadding='10' border = '1' align='center'>" +
   "<tr>" +
 
@@ -652,7 +642,26 @@ function ini_ClaseCopia() {
 
   "</tr>";
 
-  
+  html_variablescopia = "<h2 align='center'>Variables Copia</h2>" +
+  "<table cellpadding='10' border = '1' align='center'>" +
+  "<tr>" +
+
+  "<td><strong>Origen" +
+  "</strong></td>" +
+
+  "<td><strong>Tipo" +
+  "</strong></td>" +
+
+  "<td><strong>Nombre" +
+  "</strong></td>" +
+
+  "<td><strong>Funcion/Metodo" +
+  "</strong></td>" +
+
+  "<td><strong>Nombre Clase" +
+  "</strong></td>" +
+
+  "</tr>";
 
   /*html_clasecopia = "<h1 align='center'>Clases Copias</h1></br>" +
   "<table cellpadding='10' border = '1' align='center'>" +
