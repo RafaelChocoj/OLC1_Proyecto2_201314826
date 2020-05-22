@@ -27,8 +27,10 @@ function Send(){
             //console.log(data.toString());
             console.log(data);
             //alert("++El resultado es: "+data.toString());
-            alert(data);
-            //console.log(data);
+
+            /////////alert(data);
+            alert(data[3]);
+
 
             var rep_ast = data[0];
             var elemento = document.getElementById('contenido-variables');

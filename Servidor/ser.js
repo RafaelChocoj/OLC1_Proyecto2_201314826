@@ -62,8 +62,6 @@ app.post('/AnalizFile/', function (req, res) {
     //////////////console.log(lex_err_final);
     //Errores.clear();
     //res.send(resultado.toString());
-    //resul_fin.push("fila1");
-    //resul_fin.push("fila2");
     resul_fin.push(html_err);
     Comparando_copias(principal, lista_copias);
     html_clasecopia = html_clasecopia + "</table>";
@@ -71,6 +69,10 @@ app.post('/AnalizFile/', function (req, res) {
     html_variablescopia = html_variablescopia + "</table>";
     resul_fin.push(html_clasecopia + html_funcionescopia + html_variablescopia);
     //console.log(html_clasecopia);
+    /*verifica si tiene errores*/
+    if (lex_err_final.length > 0) {
+        resul_fin.push("Error!!, Se encontraron algunos errores\nen el analisis de la entrada");
+    }
     res.send(resul_fin);
 });
 var server = app.listen(8080, function () {
@@ -84,7 +86,7 @@ var server = app.listen(8080, function () {
     }
 }*/
 function parser(entrada) {
-    console.log("cad en: " + entrada);
+    //////////////////////////console.log("cad en: " + entrada)
     let resul_fin;
     resul_fin = new Array();
     try {
@@ -118,6 +120,8 @@ function parser(entrada) {
         //analizador.clear_lista_erroes();
         //let lex_err =  gramatica.get_lista_erroes();
         lex_err = gramatica.get_lista_erroes();
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        console.log(lex_err);
         //let lex_err =  analizador.get_lista_erroes();
         for (let i = 0; i < lex_err.length; i++) {
             lex_err[i].Origen = "Principal";
@@ -184,7 +188,6 @@ function parser_copias(entrada, numpes) {
 function Comparando_copias(ar_principal, lis_copias) {
     console.log("11111111111111111111 verifiando origianl");
     console.log(ar_principal);
-    /////console.log("2222222");
     //console.log(lis_copias);
     /*verificando copia de clase CLASE*/
     for (let i = 0; i < lis_copias.length; i++) {
@@ -244,11 +247,11 @@ function Num_MetFun(ListInstruc_ori, ListInstruc_cop) {
             funcion_cop = funcion_cop + 1;
         }
     }
-    console.log("123 123 123 123 123 123 123 132 132 123");
+    ///////console.log("123 123 123 123 123 123 123 132 132 123");
     ///////console.log(ListInstruc_ori);
     ///////console.log(ListInstruc_cop);
-    console.log("original : M-" + metodos_or + " F-" + funcion_or);
-    console.log("copia : M-" + metodos_cop + " F-" + funcion_cop);
+    //console.log("original : M-" + metodos_or + " F-"+funcion_or);
+    //console.log("copia : M-" + metodos_cop + " F-"+funcion_cop);
     if (metodos_or == metodos_cop && funcion_or == funcion_cop) {
         return true;
     }
@@ -321,8 +324,8 @@ function Copias_VARIABLES(Lvar_ori, Lvar_cop, nameclass, pesta, name_fun) {
                     /*SI LA VARIABLE ES IGUAL*/
                     if (var_or.identificador[lv] == var_cop.identificador[vco] &&
                         tipo_or == tipo_cop) {
-                        console.log("igual variable igual variable igual variable igual variable");
-                        console.log(var_or.identificador[lv] + "==" + var_cop.identificador[vco] + ", " + tipo_or + "==" + tipo_cop);
+                        ///////console.log("igual variable igual variable igual variable igual variable");
+                        ///////console.log(var_or.identificador[lv] +"=="+ var_cop.identificador[vco] + ", "+ tipo_or+ "==" +tipo_cop);
                         html_variablescopia_tempo = html_variablescopia_tempo + "<tr>" +
                             "<td> Pestania(" + (pesta + 1) + ")" +
                             "</td>" +

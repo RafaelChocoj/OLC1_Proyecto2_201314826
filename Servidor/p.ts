@@ -95,10 +95,12 @@ var entrada = "do {\n"+
 "*/\n"+
 
 "@ void suma() { "+
-"if( 3 < 4) # { while(1>a || a ==b){ /*return 25*2;*/} }"+
+"if( 3 < 4  # { while(1>a || a ==b){ /*return 25*2;*/} }"+
   "System.out.println(\"7 elevado al cubo es: \"+3);"+
   //"for(int k=15; k>5 ; k--){ /* Sentencias */ a = 'd'; }"+
   "return !(true || 1>a) ; }\n" +
+"saber = 0;\n" +
+
 "}\n";
 
 //If(true) { /* Sentencias */ }
@@ -114,10 +116,10 @@ console.log("res: " + resultado);
 
 function parser(texto:string) {
     console.log("cad en: " + texto)
-    try {
+    ///////try {
         //const tree = gramatica.parse(entrada);
         const tree = analizador.parse(entrada);
-        
+
 
         //return gramatica.parse(texto);
         //const res = tree.execute(tree);
@@ -157,7 +159,7 @@ function parser(texto:string) {
 
         for (let i = 0; i < tree.arbol_ast.length; i++)
         {
-            console.log(tree.arbol_ast[i]);
+            //console.log(tree.arbol_ast[i]);
         }
         console.log("-------------------");
         ///errores
@@ -165,17 +167,19 @@ function parser(texto:string) {
         //
         //console.log(gramatica);
         //analizador.clear_lista_erroes();
-        const lex_err =  analizador.get_lista_erroes();
-        console.log( lex_err);
-        console.log("tam, desde fin " + lex_err.length);
+        
         //console.log(analizador.parseError;
+        const lex_err =  analizador.get_lista_erroes();
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        console.log(lex_err);
+        console.log("tam, desde fin " + lex_err.length);
 
         console.log(tree.lis_err);
         
 
         //////
-        return null;
-    } catch (e) {
-        return "Error en compilacion de Entrada: "+ e.toString();
-    }
+    ///////    return null;
+    ////} catch (e) {
+    ///    return "Error en compilacion de Entrada: "+ e.toString();
+   ///// }
 }

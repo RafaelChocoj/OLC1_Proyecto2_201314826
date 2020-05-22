@@ -20,6 +20,7 @@
     const {Clase} = require('../ClasesF/Clase');
     const {Continue} = require('../ClasesF/Continue');
     const {Break} = require('../ClasesF/Break');
+    const {ErrSinta} = require('../ClasesF/ErrSinta');
 
     const {ReturnM} = require('../ClasesF/ReturnM');
     const {ReturnF} = require('../ClasesF/ReturnF');
@@ -52,12 +53,12 @@
           return 1;
      };
      
-      console.log("xxxxxxxx: " + lis_err.length);
+      /////console.log("xxxxxxxx: " + lis_err.length);
 
       exports.get_lista_erroes = function () { 
           
-          console.log("Tamaño Original-----" + lis_err.length);
-          console.log(lis_err);
+          ///////console.log("Tamaño Original-----" + lis_err.length);
+          ////////console.log(lis_err);
           return lis_err;
 
           //console.log("Tamaño Original-----" + ls_lex.err_lex.length);
@@ -205,26 +206,28 @@ char [\'][^\'\n][\']
 ////INICIO: EX EOF {};
 
 //INICIO : LIS_INSTRUCCIONES EOF {$$ = new Tree($1); return $$;};
-INICIO : IN_CLASE EOF {$$ = new Tree($1); return $$;};
+INICIO : IN_CLASE EOF { console.log("fin sinta"); $$ = new Tree($1); return $$;};
 IN_CLASE : CLASE { $$ = [$1]; }
       ;
 
 CLASE : IMPORTS 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase($1, $3, $5, _$.first_line, _$.first_column); }
       | 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase([], $2, $4, _$.first_line, _$.first_column); }
+      | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', :( en la columna: ' + this._$.first_column + " se esperaba: "  );
+                        $$ = new ErrSinta(this._$.first_line, this._$.first_column ); }
+
       ;
 IMPORTS : IMPORTS 'import' identificador ';' { $$ = $1; $$.push($3); }
       |  'import' identificador ';' { $$ = [$2]; }
       ;
 
 LIS_INSTRU_CLASS : LIS_INSTRU_CLASS INSTRU_CLASS { $$ = $1; $$.push($2); }
-                    | INSTRU_CLASS                 { $$ = [$1]; }
-                    //| error { console.log('++Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+                    | INSTRU_CLASS                 { $$ = [$1]; }                  
                     ;
 INSTRU_CLASS : DECLARACION {$$ = $1;}
-            | ASIGNACION {$$ = $1;}
+            //| ASIGNACION {$$ = $1;}
             | MAIN {$$ = $1;}
             | METODO {$$ = $1;}
-            | FUNCION {$$ = $1;}
+            | FUNCION {$$ = $1;}  
             ;
 
 LIS_INSTRUCCIONES : LIS_INSTRUCCIONES INSTRUCCION { $$ = $1; $$.push($2); }
@@ -255,6 +258,7 @@ INSTRUCCION : DECLARACION {$$ = $1;}
             /*solo para main y metodos*/
             | 'return' ';' {$$ = new ReturnM(@1.first_line, @1.first_column);}
             | 'return' EX ';'  {$$ = new ReturnF($2, @1.first_line, @1.first_column);}
+            //| error { console.log('inst Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
             ;
 
 
