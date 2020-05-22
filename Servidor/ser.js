@@ -218,14 +218,6 @@ function Comparando_copias(ar_principal, lis_copias) {
             /*verificando funciones copias*/
             let is_funcopia;
             is_funcopia = Copia_FUNCIONES(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase, ar_principal[0].identificador, i);
-            /*if (is_funcopia == true) {
-              console.log("si si si par par  COPIA pes " + (i +1));
-              html_funcionescopia = html_funcionescopia + html_funcionescopia_tempo;
-            }
-            else {
-              html_funcionescopia_tempo = "";
-              console.log("par par par no no no COPIA pes " + (i +1));
-            }*/
         }
     }
 }
@@ -253,8 +245,8 @@ function Num_MetFun(ListInstruc_ori, ListInstruc_cop) {
         }
     }
     console.log("123 123 123 123 123 123 123 132 132 123");
-    console.log(ListInstruc_ori);
-    console.log(ListInstruc_cop);
+    ///////console.log(ListInstruc_ori);
+    ///////console.log(ListInstruc_cop);
     console.log("original : M-" + metodos_or + " F-" + funcion_or);
     console.log("copia : M-" + metodos_cop + " F-" + funcion_cop);
     if (metodos_or == metodos_cop && funcion_or == funcion_cop) {
@@ -313,6 +305,43 @@ function Recorriendo_MetFun(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) 
     }
     return Is_Copy;
 }
+function Copias_VARIABLES(Lvar_ori, Lvar_cop, nameclass, pesta, name_fun) {
+    for (let i = 0; i < Lvar_ori.length; i++) {
+        const var_or = Lvar_ori[i];
+        let tipo_or = var_or.type.toString();
+        for (let lv = 0; lv < var_or.identificador.length; lv++) {
+            /*verifica si tiene el tipo e indentificador es el mismo*/
+            // id original = var_or.identificador[lv]
+            /*declaracion copias*/
+            for (let c = 0; c < Lvar_cop.length; c++) {
+                const var_cop = Lvar_cop[c];
+                let tipo_cop = var_cop.type.toString();
+                for (let vco = 0; vco < var_cop.identificador.length; vco++) {
+                    // id codia = var_cop.identificador[vco]
+                    /*SI LA VARIABLE ES IGUAL*/
+                    if (var_or.identificador[lv] == var_cop.identificador[vco] &&
+                        tipo_or == tipo_cop) {
+                        console.log("igual variable igual variable igual variable igual variable");
+                        console.log(var_or.identificador[lv] + "==" + var_cop.identificador[vco] + ", " + tipo_or + "==" + tipo_cop);
+                        html_variablescopia_tempo = html_variablescopia_tempo + "<tr>" +
+                            "<td> Pestania(" + (pesta + 1) + ")" +
+                            "</td>" +
+                            "<td>" + tipo_cop +
+                            "</td>" +
+                            "<td>" + var_or.identificador[lv] +
+                            "</td>" +
+                            "<td>" + name_fun +
+                            "</td>" +
+                            "<td>" + nameclass +
+                            "</td>" +
+                            "</tr>";
+                    }
+                }
+            }
+            /*fin for original*/
+        }
+    }
+}
 function Copia_FUNCIONES(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) {
     /*FUNCIONES Y EVENTOS DE LA CLASE*/
     let Is_Copy = false;
@@ -370,8 +399,11 @@ function Copia_FUNCIONES(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) {
                                     "</tr>";
                                 Is_Copy = true;
                                 /*verifianco las variables*/
-                                console.log("aaaaa met instrucciones del met");
+                                console.log("aaaaa met instrucciones del met original");
                                 console.log(res.ListAllVar);
+                                console.log("aaaaa met instrucciones del met copia");
+                                console.log(copy.ListAllVar);
+                                Copias_VARIABLES(res.ListAllVar, copy.ListAllVar, nameclass, pesta, copy.identificador);
                             }
                         }
                         /*fin met*/
@@ -434,17 +466,17 @@ function Copia_FUNCIONES(ListInstruc_ori, ListInstruc_cop, nameclass, pesta) {
                     }
                 }
             }
-            /*if (Is_Copy == false) {
-              //return Is_Copy;
-              html_funcionescopia_tempo = "";
-            }*/
             if (Is_Copy == true) {
                 console.log("si si si par par  COPIA pes " + (i + 1));
                 html_funcionescopia = html_funcionescopia + html_funcionescopia_tempo;
                 html_funcionescopia_tempo = "";
+                //var
+                html_variablescopia = html_variablescopia + html_variablescopia_tempo;
+                html_variablescopia_tempo = "";
             }
             else {
                 html_funcionescopia_tempo = "";
+                html_variablescopia_tempo = "";
                 console.log("par par par no no no COPIA pes " + (i + 1));
             }
         }
