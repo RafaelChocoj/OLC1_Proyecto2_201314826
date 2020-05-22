@@ -287,14 +287,14 @@ function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) 
       /*verificando funciones copias*/
       let is_funcopia:Boolean;
       is_funcopia = Copia_FUNCIONES(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase, ar_principal[0].identificador, i);
-      if (is_funcopia == true) {
+      /*if (is_funcopia == true) {
         console.log("si si si par par  COPIA pes " + (i +1));
         html_funcionescopia = html_funcionescopia + html_funcionescopia_tempo;
       }
       else {
         html_funcionescopia_tempo = "";
         console.log("par par par no no no COPIA pes " + (i +1));
-      }
+      }*/
 
 
     }
@@ -440,14 +440,14 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
           console.log("5---par-------es metodo");
           /*verificando si tiene el mismo metodo en las copias*/
           for (let c = 0; c < ListInstruc_cop.length; c++) {
+
             const copy = ListInstruc_cop[c];
             if(copy instanceof Metodo){
 
               /*verificando el los parametros*/
-              console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+              console.log("aaaaa met aaaaaaaaaaaaaaaaaaaaaaaa");
               //////console.log(res.ListParametros);
               //////console.log(copy.ListParametros);
-              //if (res.identificador == copy.identificador)
               /*el mismo tamaño de parametros*/
               if (res.ListParametros.length == copy.ListParametros.length)
               {
@@ -455,8 +455,8 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                 let par_igual:Boolean = false;
                 let row_parametro:Array<String> = new Array<String>();
                 for (let par = 0; par < res.ListParametros.length; par++) {
-                  if(res.ListParametros[par].type.toString() ==  copy.ListParametros[par].type.toString() &&
-                    res.ListParametros[par].identificador ==  copy.ListParametros[par].identificador ){
+                  if(res.ListParametros[par].type.toString() ==  copy.ListParametros[par].type.toString() /*&&
+                    res.ListParametros[par].identificador ==  copy.ListParametros[par].identificador*/ ){
                       par_igual = true;
                       console.log(res.ListParametros[par].type.toString() +"=="+  copy.ListParametros[par].type.toString());
                       row_parametro.push(copy.ListParametros[par].type.toString() + " " + copy.ListParametros[par].identificador);
@@ -464,7 +464,9 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                     par_igual = false;
                     par = res.ListParametros.length
                   }
-
+                }
+                if (res.ListParametros.length  == 0){
+                  par_igual = true;  
                 }
                 if (par_igual == true)
                 {
@@ -473,30 +475,23 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                   html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
                   "<td> Pestania(" + (pesta+1) + ")"+
                   "</td>" +
-
                   "<td> void"  +
                   "</td>" +
-
                   "<td>" + res.identificador +
                   "</td>" +
-
                   "<td>" + copy.identificador +
                   "</td>" +
-
                   "<td>" + row_parametro +
                   "</td>" +
-
                   "<td>" + nameclass +
                   "</td>" +
 
                   "</tr>";
                   Is_Copy = true;
-
                 }
-
               }
 
-
+              /*fin met*/
 
             }
           }
@@ -508,33 +503,85 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
         /*verificando si tiene la misma guncion en las copias*/
         for (let c = 0; c < ListInstruc_cop.length; c++) {
           const copy_fun = ListInstruc_cop[c];
+
           if(copy_fun instanceof Funcion){
-            //console.log("or id fun " + res.identificador + "  or  tipo fun " + res.type.toString());
-            //console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
-            if (res.identificador == copy_fun.identificador && res.type.toString() == copy_fun.type.toString())
+            /*verificando el los parametros*/
+            console.log("aaaaa fun aaaaaaaaaaaaaaaaaaaaaaaa");
+            //console.log(res.ListParametros);
+            //console.log(copy_fun.ListParametros);
+
+            /*el mismo tamaño de parametros y el mismo tipo*/
+            console.log("1111 res.ListParametros.length:  " + res.ListParametros.length);
+            if (res.ListParametros.length == copy_fun.ListParametros.length &&
+              res.type.toString() == copy_fun.type.toString())
             {
-              console.log(res.ListParametros);
-              console.log("funcion igual " + res.identificador);
-              /*html_clasecopia_tempo = html_clasecopia_tempo +  "<tr>" +
-              "<td>" + pesta +
-              "</td>" +
+              /*verificando tipo y nombre de parametros*/
+              let par_igual:Boolean = false;
+              let row_parametro:Array<String> = new Array<String>();
+              for (let par = 0; par < res.ListParametros.length; par++) {
+                if(res.ListParametros[par].type.toString() ==  copy_fun.ListParametros[par].type.toString()/* &&
+                  res.ListParametros[par].identificador ==  copy_fun.ListParametros[par].identificador*/ ){
+                    par_igual = true;
+                    console.log(res.ListParametros[par].type.toString() +"=="+  copy_fun.ListParametros[par].type.toString());
+                    row_parametro.push(copy_fun.ListParametros[par].type.toString() + " " + copy_fun.ListParametros[par].identificador);
+                } else {
+                  par_igual = false;
+                  par = res.ListParametros.length
+                }
 
-              "<td>" + nameclass +
-              "</td>" +
+              }
+              if (res.ListParametros.length  == 0){
+                par_igual = true;
+                
+              }
+              if (par_igual == true)
+              {
 
-              "<td> FUN: " + copy_fun.identificador +
-              "</td>" +
-              "</tr>";*/
-              Is_Copy = true;
+                console.log("parametro igual " + res.identificador);
+                html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
+                "<td> Pestania(" + (pesta+1) + ")"+
+                "</td>" +
+                "<td>"  + res.type.toString()+
+                "</td>" +
+                "<td>" + res.identificador +
+                "</td>" +
+                "<td>" + copy_fun.identificador +
+                "</td>" +
+                "<td>" + row_parametro +
+                "</td>" +
+                "<td>" + nameclass +
+                "</td>" +
+
+                "</tr>";
+                Is_Copy = true;
+
+              }
+
             }
+
+            /*fin met*/
+
           }
+
         }
+
 
 
       }
 
-      if (Is_Copy == false) {
-        return Is_Copy;
+      /*if (Is_Copy == false) {
+        //return Is_Copy;
+        html_funcionescopia_tempo = "";
+      }*/
+
+      if (Is_Copy == true) {
+        console.log("si si si par par  COPIA pes " + (i +1));
+        html_funcionescopia = html_funcionescopia + html_funcionescopia_tempo;
+        html_funcionescopia_tempo = "";
+      }
+      else {
+        html_funcionescopia_tempo = "";
+        console.log("par par par no no no COPIA pes " + (i +1));
       }
 
     }
