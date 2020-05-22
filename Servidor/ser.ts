@@ -365,7 +365,7 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
             if(copy instanceof Metodo){
               if (res.identificador == copy.identificador)
               {
-                console.log("metodo igual " + res.identificador);
+                //////console.log("metodo igual " + res.identificador);
                 Is_Copy = true;
                 //html_clasecopia
               }
@@ -384,8 +384,8 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
             //console.log("copy id fun " + copy_fun.identificador + "  copy  tipo fun " + copy_fun.type.toString());
             if (res.identificador == copy_fun.identificador && res.type.toString() == copy_fun.type.toString())
             {
-              console.log(res.ListParametros);
-              console.log("funcion igual " + res.identificador);
+              //////console.log(res.ListParametros);
+              //////console.log("funcion igual " + res.identificador);
               Is_Copy = true;
             }
           }
@@ -518,10 +518,10 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                   Is_Copy = true;
 
                   /*verifianco las variables*/
-                  console.log("aaaaa met instrucciones del met original");
-                  console.log(res.ListAllVar);
-                  console.log("aaaaa met instrucciones del met copia");
-                  console.log(copy.ListAllVar);
+                  /////console.log("aaaaa met instrucciones del met original");
+                  /////console.log(res.ListAllVar);
+                  /////console.log("aaaaa met instrucciones del met copia");
+                  /////console.log(copy.ListAllVar);
                   Copias_VARIABLES(res.ListAllVar, copy.ListAllVar, nameclass, pesta, copy.identificador);
 
                 }
@@ -585,6 +585,13 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
 
                 "</tr>";
                 Is_Copy = true;
+
+                /*verifianco las variables*/
+                /////console.log("aaaaa FUN instrucciones del FUN original");
+                /////console.log(res.ListAllVar);
+                /////console.log("aaaaa FUN instrucciones del FUN copia");
+                /////console.log(copy_fun.ListAllVar);
+                Copias_VARIABLES(res.ListAllVar, copy_fun.ListAllVar, nameclass, pesta, copy_fun.identificador);
 
               }
             }

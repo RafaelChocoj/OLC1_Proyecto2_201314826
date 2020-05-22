@@ -2,6 +2,8 @@ import { Node } from "../Abstracto/Node"
 import { Tree } from "../Simbols/Tree";
 import {types, Tipo } from "../Abstracto/Tipo";
 
+import {Declaracion}  from "../Instrucciones/Declaracion";
+
 
 export class Funcion extends Node {
     type:Tipo;
@@ -43,7 +45,11 @@ export class Funcion extends Node {
             tree.arbol_ast.push("<li data-jstree='{ \"opened\" : true }'>Lista Instrucciones");
             tree.arbol_ast.push("<ul>");
             for (let i = 0; i < this.ListInstruc.length; i++) {
-                const res = this.ListInstruc[i].execute(tree, false, "RF", false);
+
+                if(this.ListInstruc[i] instanceof Declaracion){
+                    this.ListAllVar.push(this.ListInstruc[i]);
+                }
+                const res = this.ListInstruc[i].execute(tree, false, "RF", false, this.ListAllVar);
                 /*if(res instanceof Continue || res instanceof Break){
                     return res;
                 }*/
