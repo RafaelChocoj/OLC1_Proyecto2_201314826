@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Node_1 = require("../Abstracto/Node");
 const Continue_1 = require("../ClasesF/Continue");
 const Declaracion_1 = require("../Instrucciones/Declaracion");
+const NodeErr_1 = require("../Errores/NodeErr");
 class DefaultSwitch extends Node_1.Node {
     //ElseList: Array<Node>;
     constructor(ListInstruc, line, column) {
@@ -22,6 +23,7 @@ class DefaultSwitch extends Node_1.Node {
                 const res = this.ListInstruc[i].execute(tree, in_bucle, T_return, true, ListAllVar);
                 if (in_bucle == false) {
                     if (res instanceof Continue_1.Continue) {
+                        tree.lis_err.push(new NodeErr_1.NodeErr("Sintactico", "Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column));
                         console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }

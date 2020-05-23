@@ -4,6 +4,7 @@ import { types } from "../Abstracto/Tipo";
 import { Continue } from '../ClasesF/Continue';
 
 import {Declaracion}  from "../Instrucciones/Declaracion";
+import { NodeErr } from "../Errores/NodeErr";
 
 
 export class CaseSwitch extends Node {
@@ -45,6 +46,7 @@ export class CaseSwitch extends Node {
                     }*/
                     if (in_bucle == false){
                         if(res instanceof Continue){
+                            tree.lis_err.push(new NodeErr("Sintactico","Sentencia Continue fuera de un ciclo", "Continue", res.line, res.column) );
                             console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                         }
                     }

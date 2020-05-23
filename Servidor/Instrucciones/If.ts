@@ -47,10 +47,10 @@ export class If extends Node {
                         console.log("Sentencia Continue fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }
-                console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
+                //console.log("in_switch: " + in_switch + ", in_bucle: " + in_bucle);
                 if (in_switch == false && in_bucle == false){
                     if(res instanceof Break){
-                        tree.lis_err.push(new NodeErr("Sintactico","Sentencia break fuera de un ciclo ", "Break", res.line, res.column) );
+                        tree.lis_err.push(new NodeErr("Sintactico","Sentencia Break fuera de un ciclo ", "Break", res.line, res.column) );
                         console.log("Sentencia break fuera de un ciclo " + res.line + "-" + res.column);
                     }
                 }

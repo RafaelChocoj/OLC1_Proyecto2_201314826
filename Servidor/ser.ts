@@ -540,7 +540,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                 if (par_igual == true)
                 {
 
-                  console.log("parametro igual " + res.identificador);
+                  ///console.log("parametro igual " + res.identificador);
                   html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
                   "<td> Pestania(" + (pesta+1) + ")"+
                   "</td>" +
@@ -609,7 +609,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                 if (par_igual == true)
                 {
 
-                  console.log("parametro igual " + "main");
+                  ///console.log("parametro igual " + "main");
                   html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
                   "<td> Pestania(" + (pesta+1) + ")"+
                   "</td>" +
@@ -654,7 +654,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
             //console.log(copy_fun.ListParametros);
 
             /*el mismo tamaño de parametros y el mismo tipo*/
-            console.log("1111 res.ListParametros.length:  " + res.ListParametros.length);
+            //////console.log("1111 res.ListParametros.length:  " + res.ListParametros.length);
             if (res.ListParametros.length == copy_fun.ListParametros.length &&
               res.type.toString() == copy_fun.type.toString())
             {
@@ -665,7 +665,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                 if(res.ListParametros[par].type.toString() ==  copy_fun.ListParametros[par].type.toString()/* &&
                   res.ListParametros[par].identificador ==  copy_fun.ListParametros[par].identificador*/ ){
                     par_igual = true;
-                    console.log(res.ListParametros[par].type.toString() +"=="+  copy_fun.ListParametros[par].type.toString());
+                    ///console.log(res.ListParametros[par].type.toString() +"=="+  copy_fun.ListParametros[par].type.toString());
                     row_parametro.push(copy_fun.ListParametros[par].type.toString() + " " + copy_fun.ListParametros[par].identificador);
                 } else {
                   par_igual = false;
@@ -677,7 +677,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
               }
               if (par_igual == true)
               {
-                console.log("parametro igual " + res.identificador);
+                ///console.log("parametro igual " + res.identificador);
                 html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
                 "<td> Pestania(" + (pesta+1) + ")"+
                 "</td>" +
