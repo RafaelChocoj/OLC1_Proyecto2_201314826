@@ -53,6 +53,10 @@ app.post('/AnalizFile/', function (req, res) {
     html_clasecopia = "";
     html_funcionescopia = "";
     html_variablescopia = "";
+
+    html_clasecopia_tempo = "";
+    html_funcionescopia_tempo = "";
+    html_variablescopia_tempo = "";
     ini_ClaseCopia();
 
     let copias_archivos: Array<String>;
@@ -88,7 +92,11 @@ app.post('/AnalizFile/', function (req, res) {
 
     resul_fin.push(html_err);
     
-    Comparando_copias(principal, lista_copias);
+
+    /*verifica si no existe errores para compara con los demas*/
+    if(lex_err_final.length == 0){
+      Comparando_copias(principal, lista_copias);
+    }
 
     html_clasecopia = html_clasecopia + "</table>";
     html_funcionescopia = html_funcionescopia + "</table>";
@@ -99,7 +107,11 @@ app.post('/AnalizFile/', function (req, res) {
 
     /*verifica si tiene errores*/
     if(lex_err_final.length > 0){
-      resul_fin.push("Error!!, Se encontraron algunos errores\nen el analisis de la entrada");
+      //resul_fin.push("Error!!, Se encontraron algunos errores\nen el analisis de la entrada");
+      resul_fin.push("SE");
+    }
+    else {
+      resul_fin.push("NE");
     }
 
     
@@ -166,8 +178,9 @@ function parser(entrada:string) {
         //analizador.clear_lista_erroes();
         //let lex_err =  gramatica.get_lista_erroes();
         lex_err =  gramatica.get_lista_erroes();
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        console.log(lex_err);
+
+        ///////////console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        ///////////console.log(lex_err);
         //let lex_err =  analizador.get_lista_erroes();
         
         for (let i = 0; i < lex_err.length; i++)
@@ -253,7 +266,7 @@ function parser_copias(entrada:String, numpes:Number) {
 
 function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) {
   console.log("11111111111111111111 verifiando origianl");
-  console.log(ar_principal);
+  //////////////////console.log(ar_principal);
   //console.log(lis_copias);
 
   /*verificando copia de clase CLASE*/
@@ -263,7 +276,7 @@ function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) 
     html_funcionescopia_tempo = "";
 
     let clas_tempo:Clase = lis_copias[i];
-    console.log(clas_tempo);
+    /////////////console.log(clas_tempo);
     if( ar_principal[0].identificador == clas_tempo[0].identificador ){
       console.log("*********************es copia :v ** pes " + (i +1)); //mismo nombre de clase
       

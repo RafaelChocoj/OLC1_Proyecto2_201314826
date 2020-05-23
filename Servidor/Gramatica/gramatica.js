@@ -96,8 +96,9 @@ case 4:
  this.$ = new Clase([], $$[$0-3], $$[$0-1], _$.first_line, _$.first_column); 
 break;
 case 5:
- console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', :( en la columna: ' + this._$.first_column + " se esperaba: "  );
-                        this.$ = new ErrSinta(this._$.first_line, this._$.first_column ); 
+ /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', :( en la columna: ' + this._$.first_column + " se esperaba: "  );*/
+            lis_err.push(new NodeErr("Sintactico","Este es un error sintáctico", yytext ,this._$.first_line, this._$.first_column ));
+            this.$ = new ErrSinta(this._$.first_line, this._$.first_column ); 
 break;
 case 6:
  this.$ = $$[$0-3]; this.$.push($$[$0-1]); 
@@ -1080,7 +1081,7 @@ case 60:return 9
 break;
 case 61:return 5
 break;
-case 62:lis_err.push(new NodeErr("Lexico","Caracter invalido", yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column)); console.log(yy_.yytext + " lex, len: " + lis_err.length, "O"); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column))
+case 62:lis_err.push(new NodeErr("Lexico","Caracter invalido", yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column)); /*console.log(yy_.yytext + " lex, len: " + lis_err.length, "O");*/   //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yy_.yytext,yy_.yylloc.first_line, yy_.yylloc.first_column))
 break;
 }
 },

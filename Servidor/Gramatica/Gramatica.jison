@@ -172,7 +172,7 @@ char [\'][^\'\n][\']
 {identificador}      return 'identificador'
 <<EOF>>	              return 'EOF'
 
-.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)); console.log(yytext + " lex, len: " + lis_err.length, "O"); //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
+.           lis_err.push(new NodeErr("Lexico","Caracter invalido", yytext,yylloc.first_line, yylloc.first_column)); /*console.log(yytext + " lex, len: " + lis_err.length, "O");*/   //lis_Errores.LisErrores.add(new NError.NodeErr("Lexico","Caracter invalido: "+yytext,yylloc.first_line, yylloc.first_column))
             
 
 /lex
@@ -212,8 +212,9 @@ IN_CLASE : CLASE { $$ = [$1]; }
 
 CLASE : IMPORTS 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase($1, $3, $5, _$.first_line, _$.first_column); }
       | 'class' identificador '{' LIS_INSTRU_CLASS '}' { $$ = new Clase([], $2, $4, _$.first_line, _$.first_column); }
-      | error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', :( en la columna: ' + this._$.first_column + " se esperaba: "  );
-                        $$ = new ErrSinta(this._$.first_line, this._$.first_column ); }
+      | error { /*console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', :( en la columna: ' + this._$.first_column + " se esperaba: "  );*/
+            lis_err.push(new NodeErr("Sintactico","Este es un error sintáctico", yytext ,this._$.first_line, this._$.first_column ));
+            $$ = new ErrSinta(this._$.first_line, this._$.first_column ); }
 
       ;
 IMPORTS : IMPORTS 'import' identificador ';' { $$ = $1; $$.push($3); }

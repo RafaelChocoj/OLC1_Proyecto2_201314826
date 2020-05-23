@@ -29,7 +29,12 @@ function Send(){
             //alert("++El resultado es: "+data.toString());
 
             /////////alert(data);
-            alert(data[3]);
+            if (data[3] == "SE"){
+                alert("Error!!, Se encontraron algunos errores\nen el analisis de la entrada");
+            } else {
+                alert("Termino el analisis");
+            }
+            
 
 
             var rep_ast = data[0];
