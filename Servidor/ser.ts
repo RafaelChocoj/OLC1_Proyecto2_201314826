@@ -12,6 +12,7 @@ import { Clase } from "./ClasesF/Clase";
 import {Metodo}  from "./ClasesF/Metodo";
 import {Funcion}  from "./ClasesF/Funcion";
 import {Declaracion } from "./Instrucciones/Declaracion";
+import {VoidMain}  from "./ClasesF/VoidMain";
 
 var app=express();
 app.use(bodyParser.json());
@@ -33,7 +34,9 @@ let html_clasecopia_tempo:String;
 
 let metodos_or:number = 0;
 let funcion_or:number = 0;
+let main_or:number = 0;
 let metodos_cop:number = 0;
+let main_cop:number = 0;
 let funcion_cop:number = 0;
 
 /*reporte de FUNCIONES copias*/
@@ -285,6 +288,8 @@ function Comparando_copias(ar_principal: Array<Clase>, lis_copias:Array<Clase>) 
       funcion_or = 0;
       metodos_cop = 0;
       funcion_cop = 0;
+      main_or = 0;
+      main_cop = 0;
 
       let igual_tam_clase:Boolean;
       igual_tam_clase = Num_MetFun(ar_principal[0].Instruc_Clase, clas_tempo[0].Instruc_Clase);
@@ -318,6 +323,8 @@ function Num_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) 
   funcion_or = 0;
   metodos_cop = 0;
   funcion_cop = 0;
+  main_or = 0;
+  main_cop = 0;
 
   for (let i = 0; i < ListInstruc_ori.length; i++) {
     const res = ListInstruc_ori[i];
@@ -325,6 +332,8 @@ function Num_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) 
       metodos_or = metodos_or + 1;
     } else if(res instanceof Funcion){
       funcion_or = funcion_or + 1;
+    } else if(res instanceof VoidMain){
+      main_or = main_or + 1;
     }
   }
 
@@ -334,6 +343,8 @@ function Num_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) 
       metodos_cop = metodos_cop + 1;
     } else if(res_cop instanceof Funcion){
       funcion_cop = funcion_cop + 1;
+    } else if(res_cop instanceof VoidMain){
+      main_cop = main_cop + 1;
     }
   }
 
@@ -346,7 +357,7 @@ function Num_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<Node>) 
 
 
 
-  if (metodos_or == metodos_cop && funcion_or == funcion_cop){
+  if (metodos_or == metodos_cop && funcion_or == funcion_cop && main_or == main_cop){
     return true;
   }
   else {
@@ -365,7 +376,7 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
   for (let i = 0; i < ListInstruc_ori.length; i++) {
     /*lista de instrucciones*/
     const res = ListInstruc_ori[i];
-    if(res instanceof Metodo || res instanceof Funcion)
+    if(res instanceof Metodo || res instanceof Funcion || res instanceof VoidMain)
     {
     //if(res instanceof Metodo ){
       Is_Copy = false;
@@ -384,10 +395,24 @@ function Recorriendo_MetFun(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array
               }
             }
           }
-          
 
-      /*FUNCION*/
-      }else if( res instanceof Funcion){
+      } else if(res instanceof VoidMain){
+        console.log("55555555555555es main");
+        /*verificando si tiene el mismo metodo en las copias*/
+        for (let c = 0; c < ListInstruc_cop.length; c++) {
+          const copy = ListInstruc_cop[c];
+          if(copy instanceof VoidMain){
+            //if (res.identificador == copy.identificador)
+            //{
+              //////console.log("metodo igual " + res.identificador);
+              Is_Copy = true;
+              //html_clasecopia
+            //}
+          }
+        }
+
+        /*FUNCION*/
+    }else if( res instanceof Funcion){
         console.log("55555555555555es funcuin ");
         /*verificando si tiene la misma guncion en las copias*/
         for (let c = 0; c < ListInstruc_cop.length; c++) {
@@ -474,9 +499,11 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
   for (let i = 0; i < ListInstruc_ori.length; i++) {
     /*lista de instrucciones*/
     const res = ListInstruc_ori[i];
-    if(res instanceof Metodo || res instanceof Funcion)
+    //if(res instanceof Metodo || res instanceof Funcion)
+    if(res instanceof Metodo || res instanceof Funcion || res instanceof VoidMain)
     {
       Is_Copy = false;
+
       /*METODO*/
       if(res instanceof Metodo){
           console.log("5---par-------es metodo");
@@ -500,7 +527,7 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                   if(res.ListParametros[par].type.toString() ==  copy.ListParametros[par].type.toString() /*&&
                     res.ListParametros[par].identificador ==  copy.ListParametros[par].identificador*/ ){
                       par_igual = true;
-                      console.log(res.ListParametros[par].type.toString() +"=="+  copy.ListParametros[par].type.toString());
+                      //console.log(res.ListParametros[par].type.toString() +"=="+  copy.ListParametros[par].type.toString());
                       row_parametro.push(copy.ListParametros[par].type.toString() + " " + copy.ListParametros[par].identificador);
                   } else {
                     par_igual = false;
@@ -540,6 +567,75 @@ function Copia_FUNCIONES(ListInstruc_ori: Array<Node>, ListInstruc_cop: Array<No
                 }
               }
               /*fin met*/
+            }
+          }
+          
+
+      /*Main*/
+      } else if(res instanceof VoidMain){
+          console.log("5---par-------es main");
+          /*verificando si tiene el mismo metodo en las copias*/
+          for (let c = 0; c < ListInstruc_cop.length; c++) {
+
+            const copy = ListInstruc_cop[c];
+            if(copy instanceof VoidMain){
+
+              /*verificando el los parametros*/
+              console.log("aaaaa main aaaaaaaaaaaaaaaaaaaaaaaa");
+              //////console.log(res.ListParametros);
+              //////console.log(copy.ListParametros);
+              /*el mismo tamaño de parametros*/
+
+              ///////////////////////////////////////////////if (res.ListParametros.length == copy.ListParametros.length)
+              ///////////////////////////////////////////////{
+
+                /*verificando tipo y nombre de parametros*/
+                let par_igual:Boolean = false;
+                /*let row_parametro:Array<String> = new Array<String>();
+                for (let par = 0; par < res.ListParametros.length; par++) {
+                  if(res.ListParametros[par].type.toString() ==  copy.ListParametros[par].type.toString() ){
+                      par_igual = true;
+                      console.log(res.ListParametros[par].type.toString() +"=="+  copy.ListParametros[par].type.toString());
+                      row_parametro.push(copy.ListParametros[par].type.toString() + " " + copy.ListParametros[par].identificador);
+                  } else {
+                    par_igual = false;
+                    par = res.ListParametros.length
+                  }
+                }*/
+                /*if (res.ListParametros.length  == 0){
+                  par_igual = true;  
+                }*/
+                par_igual = true;
+                if (par_igual == true)
+                {
+
+                  console.log("parametro igual " + "main");
+                  html_funcionescopia_tempo = html_funcionescopia_tempo +  "<tr>" +
+                  "<td> Pestania(" + (pesta+1) + ")"+
+                  "</td>" +
+                  "<td> void"  +
+                  "</td>" +
+                  "<td>" + "* main" +
+                  "</td>" +
+                  "<td>" +  "* main" +
+                  "</td>" +
+                  "<td>" + "" +
+                  "</td>" +
+                  "<td>" + nameclass +
+                  "</td>" +
+                  "</tr>";
+                  Is_Copy = true;
+
+                  /*verifianco las variables*/
+                  /////console.log("aaaaa met instrucciones del met original");
+                  /////console.log(res.ListAllVar);
+                  /////console.log("aaaaa met instrucciones del met copia");
+                  /////console.log(copy.ListAllVar);
+                  Copias_VARIABLES(res.ListAllVar, copy.ListAllVar, nameclass, pesta, "* void main");
+
+                }
+              /////////////////////////////////////////////////////}
+              /*fin main*/
             }
           }
           
@@ -651,6 +747,10 @@ function ClaseCopia_rows(nameclass:String, pesta:number ) {
   "<td> " + funcion_or +
   "</td>" +
 
+  "<td> " + main_or +
+  "</td>" +
+
+
   "</tr>";
 
 }
@@ -671,6 +771,9 @@ function ini_ClaseCopia() {
   "</strong></td>" +
 
   "<td><strong>No. Funcion" +
+  "</strong></td>" +
+
+  "<td><strong>No. Main" +
   "</strong></td>" +
 
   "</tr>";
